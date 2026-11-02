@@ -1,391 +1,673 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Between Us — WLW Dating Sim</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Between Us | WLW Romance</title>
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;background:#11121a;color:#f4eff5;
- font-family:Georgia,serif;min-height:100vh;
+ margin:0;background:#15131e;color:#f9edf8;
+ font-family:Georgia,serif;
 }
-button{font-family:inherit;cursor:pointer}
-#game{max-width:760px;margin:auto;min-height:100vh;
- background:#191923;padding:22px 18px}
-header{text-align:center;padding:20px 0 12px}
-header h1{letter-spacing:5px;font-size:29px;margin:0}
-header p{color:#aaa0b4;font-size:12px;letter-spacing:2px}
+button,input{font:inherit}
+button{cursor:pointer}
+#app{max-width:850px;min-height:100vh;margin:auto;padding:18px}
+header{text-align:center;padding:20px}
+header h1{font-size:38px;letter-spacing:5px;margin:0;color:#f5b7df}
+header p{font-size:11px;letter-spacing:3px;color:#b8a3bc}
+.screen{display:none}
+.screen.active{display:block}
+.card{
+ background:#24202e;border:1px solid #55435d;
+ border-radius:15px;padding:18px;margin:13px 0;
+}
 .cover{
- height:175px;border-radius:12px;
- background:linear-gradient(0deg,#191923aa,#19192322),
- url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1000')
- center/cover;
- display:flex;align-items:end;padding:15px;
- color:white;font-size:12px;
+ min-height:280px;border-radius:15px;
+ display:flex;flex-direction:column;justify-content:end;
+ padding:25px;
+ background:linear-gradient(0deg,#191321,#19132120),
+ radial-gradient(ellipse at 20% 30%,#ad779a,#47354e 55%,#22202d);
 }
-.panel{background:#242431;border:1px solid #383544;
- border-radius:12px;padding:17px;margin-top:15px}
-.small{font-size:12px;color:#aaa4b3}
-h2{font-size:21px;margin:8px 0}
-h3{font-size:15px;margin:0 0 10px}
+.cover h2{font-size:43px;margin:0;color:#ffc6e7}
+.cover p{color:#eee0ef}
 input{
- width:100%;padding:13px;background:#171721;
- color:white;border:1px solid #51475b;
- border-radius:8px;margin:10px 0;
+ width:100%;padding:14px;border-radius:9px;
+ border:1px solid #755c7d;background:#171520;
+ color:white;margin:10px 0;
 }
 button{
- border:1px solid #79627c;background:#393044;
- color:#fff;padding:13px;border-radius:8px;
- width:100%;margin-top:9px;font-size:14px;
- transition:.2s;
+ width:100%;padding:13px;margin-top:9px;
+ border:1px solid #806184;border-radius:9px;
+ color:white;background:#47344e;
 }
-button:hover{background:#634b68}
-.primary{background:#855d7e}
-.secondary{background:#292633}
-.character{
- display:flex;gap:13px;align-items:center;
- padding:12px;background:#1b1a25;
- border-radius:10px;margin-top:10px;
+button:hover{background:#79567e}
+.primary{background:#a35e91}
+.secondary{background:#292432}
+.characters{
+ display:grid;grid-template-columns:1fr 1fr;gap:12px;
 }
-.avatar{
- width:55px;height:55px;border-radius:50%;
- display:grid;place-items:center;font-size:23px;
- background:#514050;flex-shrink:0;
+.character{text-align:center;background:#191722;
+ border-radius:12px;padding:10px}
+.portrait{
+ width:100%;height:190px;display:block;
+ border-radius:10px;background:#dfbfd8;
 }
-.character p{margin:4px 0;color:#aaa;font-size:12px}
-#story{line-height:1.8;white-space:pre-line;font-size:15px}
-#speaker{color:#d5a7cf;font-size:12px;letter-spacing:2px}
-.choice{text-align:left;line-height:1.5}
-.choice small{color:#c6a8c5}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#1a1923;border-radius:8px;padding:10px}
-.stat b{font-size:12px}
-.bar{height:5px;background:#45404c;border-radius:8px;margin-top:7px}
-.fill{height:5px;background:#d38cbd;border-radius:8px}
-#log{font-size:12px;color:#aaa;max-height:100px;overflow:auto}
-footer{text-align:center;color:#746d7c;font-size:11px;padding:25px}
-.hidden{display:none!important}
+.character b{display:block;margin:8px}
+.character small{color:#c9b5cb}
+.stats{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:8px
+}
+.stat{background:#191722;padding:11px;border-radius:9px}
+.stat small{font-size:11px;color:#c7b4ca}
+.stat strong{display:block;margin-top:5px}
+.track{height:5px;background:#514454;border-radius:8px;margin-top:8px}
+.fill{height:5px;background:#e59acb;border-radius:8px;width:0}
+.scene{
+ min-height:185px;border-radius:12px;
+ background:linear-gradient(140deg,#493b58,#a67b9b,#dfb5c9);
+ display:flex;align-items:center;justify-content:center;
+ overflow:hidden;margin-bottom:14px;
+}
+.scene svg{height:230px;max-width:100%}
+.chapter{color:#dba7d2;font-size:11px;letter-spacing:2px}
+#title{font-size:27px;margin:8px 0}
+#speaker{color:#e8a9d5;font-size:12px;letter-spacing:2px}
+#dialogue{line-height:1.9;white-space:pre-line;min-height:110px}
+.choice{text-align:left;background:#33283c;line-height:1.5}
+.choice:active{background:#925c85}
+#history{font-size:12px;color:#bbaabd;line-height:1.8}
+.endimg{font-size:65px;text-align:center;padding:20px}
+@media(max-width:480px){
+ #app{padding:12px}
+ .cover h2{font-size:34px}
+ .portrait{height:145px}
+ .stats{gap:5px}
+ .stat{padding:8px}
+}
 </style>
 </head>
+
 <body>
-<div id="game">
+<div id="app">
+
 <header>
 <h1>BETWEEN US</h1>
-<p>A STORY ABOUT LOVE, CHOICES & FEELINGS</p>
+<p>A WLW SCHOOL ROMANCE</p>
 </header>
 
-<div id="home">
-<div class="cover">Some feelings are harder to confess.</div>
-<div class="panel">
-<h2>Welcome to Westbridge.</h2>
-<p class="small">Sekolah baru. Orang-orang baru. Dan dua perempuan yang mungkin akan mengubah hidupmu.</p>
-<label class="small">Nama karakter kamu</label>
-<input id="playerName" maxlength="18" placeholder="Masukkan nama...">
-<button class="primary" onclick="startGame()">START NEW GAME</button>
-<button class="secondary" onclick="continueGame()">CONTINUE</button>
-<button class="secondary" onclick="showHelp()">HOW TO PLAY</button>
-</div>
-<div class="panel">
-<h3>CHARACTERS</h3>
-<div class="character">
-<div class="avatar">🌷</div>
-<div><b>Alessia Morgan</b><p>Quiet · Intelligent · Secretly affectionate</p></div>
-</div>
-<div class="character">
-<div class="avatar">🦋</div>
-<div><b>Naomi Carter</b><p>Confident · Playful · Easily jealous</p></div>
-</div>
-</div>
+<!-- HOME -->
+<section id="home" class="screen active">
+<div class="cover">
+<h2>Between Us ♡</h2>
+<p>Two hearts. One school. Countless possibilities.</p>
 </div>
 
-<div id="help" class="panel hidden">
-<h2>How to play</h2>
-<p class="small">Pilih jawaban yang menurutmu tepat. Setiap pilihan bisa mengubah hubunganmu dengan karakter lain.</p>
-<p class="small">LOVE: ketertarikan mereka.</p>
-<p class="small">TRUST: kepercayaan mereka padamu.</p>
-<p class="small">JEALOUSY: tingkat kecemburuan.</p>
-<button onclick="hideHelp()">BACK</button>
+<div class="card">
+<h2>Welcome to Westbridge Academy</h2>
+<p style="color:#c5b3c8;line-height:1.8">
+Kehidupan sekolah yang awalnya biasa saja perlahan berubah setelah kamu bertemu dua perempuan yang berbeda.
+</p>
+<label>Nama karakter kamu</label>
+<input id="player" maxlength="18" placeholder="Masukkan nama...">
+<button class="primary" onclick="newGame()">NEW GAME</button>
+<button class="secondary" onclick="resume()">CONTINUE</button>
+<button class="secondary" onclick="showGallery()">CHARACTER GALLERY</button>
 </div>
 
-<div id="play" class="hidden">
+<div class="card">
+<h3>MAIN CHARACTERS</h3>
+<div class="characters">
+<div class="character">
+<div id="homeA"></div>
+<b>Alessia Morgan</b>
+<small>Quiet · Intelligent · Caring</small>
+</div>
+<div class="character">
+<div id="homeN"></div>
+<b>Naomi Carter</b>
+<small>Playful · Confident · Jealous</small>
+</div>
+</div>
+</div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="screen">
+<div class="card">
+<h2>Character Gallery</h2>
+<div class="characters">
+<div class="character">
+<div id="galleryA"></div>
+<b>Alessia Morgan</b>
+<small>18 · The quiet girl</small>
+<p>She remembers little things about you.</p>
+</div>
+<div class="character">
+<div id="galleryN"></div>
+<b>Naomi Carter</b>
+<small>18 · The cheerful girl</small>
+<p>She hides her feelings behind jokes.</p>
+</div>
+</div>
+<button onclick="show('home')">BACK</button>
+</div>
+</section>
+
+<!-- GAME -->
+<section id="game" class="screen">
+
 <div class="stats">
-<div class="stat"><b>🌷 Alessia</b><div id="aNum">0</div><div class="bar"><div class="fill" id="aBar"></div></div></div>
-<div class="stat"><b>🦋 Naomi</b><div id="nNum">0</div><div class="bar"><div class="fill" id="nBar"></div></div></div>
-<div class="stat"><b>♡ Trust</b><div id="trustNum">0</div><div class="bar"><div class="fill" id="tBar"></div></div></div>
+<div class="stat">
+<small>♡ ALESSIA</small>
+<strong id="aNum">0</strong>
+<div class="track"><div id="aBar" class="fill"></div></div>
 </div>
-<div class="panel">
-<div class="small" id="chapter">CHAPTER 01</div>
-<h2 id="title">First Day</h2>
-<div id="speaker">NARRATOR</div>
-<p id="story"></p>
+<div class="stat">
+<small>♡ NAOMI</small>
+<strong id="nNum">0</strong>
+<div class="track"><div id="nBar" class="fill"></div></div>
+</div>
+<div class="stat">
+<small>✧ TRUST</small>
+<strong id="tNum">0</strong>
+<div class="track"><div id="tBar" class="fill"></div></div>
+</div>
+</div>
+
+<div class="card">
+<div class="chapter" id="chapter"></div>
+<h2 id="title"></h2>
+<div class="scene" id="illustration"></div>
+<div id="speaker"></div>
+<p id="dialogue"></p>
 <div id="choices"></div>
 </div>
-<div class="panel">
+
+<div class="card">
 <h3>STORY HISTORY</h3>
-<div id="log">Belum ada cerita.</div>
-</div>
-<button class="secondary" onclick="saveGame()">SAVE GAME</button>
-<button class="secondary" onclick="goHome()">MAIN MENU</button>
+<div id="history">Your story begins...</div>
 </div>
 
-<div id="ending" class="hidden">
-<div class="panel">
-<div class="small">YOUR STORY ENDS HERE</div>
-<h2 id="endingTitle"></h2>
-<p id="endingText" style="line-height:1.8"></p>
-</div>
-<button class="primary" onclick="startGame()">PLAY AGAIN</button>
-<button class="secondary" onclick="goHome()">MAIN MENU</button>
-</div>
+<button class="secondary" onclick="save()">SAVE GAME</button>
+<button class="secondary" onclick="show('home')">MAIN MENU</button>
+</section>
 
-<footer>BETWEEN US · A FICTIONAL WLW STORY</footer>
+<!-- ENDING -->
+<section id="ending" class="screen">
+<div class="card">
+<div class="endimg">♡</div>
+<div class="chapter">YOUR STORY</div>
+<h2 id="endTitle"></h2>
+<p id="endText" style="line-height:2"></p>
+</div>
+<button class="primary" onclick="newGame()">PLAY AGAIN</button>
+<button class="secondary" onclick="show('home')">MAIN MENU</button>
+</section>
+
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
+// =================================
+// CHARACTER ILLUSTRATIONS
+// =================================
 
-let state={name:"",a:0,n:0,t:0,j:0,day:1,log:[],route:""};
-let current="intro";
+function portrait(type,emotion="normal"){
+ let isA=type==="a";
+ let hair=isA?"#211722":"#79503f";
+ let skin="#f5d5cb";
+ let shirt=isA?"#333044":"#72506a";
+ let eyes=emotion==="happy"?"#6a414c":"#49313c";
+ let bangs=isA?
+ 'M45 105 Q35 15 110 15 Q190 8 180 105 Q157 65 128 77 Q90 49 45 105':
+ 'M45 105 Q34 20 110 15 Q190 8 180 105 Q160 62 130 77 Q95 48 45 105';
 
-function startGame(){
- const name=$("playerName").value.trim()||"Rei";
- state={name,a:0,n:0,t:0,j:0,day:1,log:[],route:""};
- current="intro";
- $("home").classList.add("hidden");
- $("help").classList.add("hidden");
- $("ending").classList.add("hidden");
- $("play").classList.remove("hidden");
- render();
+ return `
+ <svg class="portrait" viewBox="0 0 220 260"
+ xmlns="http://www.w3.org/2000/svg">
+ <defs>
+ <linearGradient id="bg${type}" x2="1" y2="1">
+ <stop stop-color="${isA?"#c5a9c9":"#e7b4c8"}"/>
+ <stop offset="1" stop-color="${isA?"#79617e":"#9a718a"}"/>
+ </linearGradient>
+ </defs>
+ <rect width="220" height="260" fill="url(#bg${type})"/>
+ <circle cx="110" cy="100" r="85" fill="#ffffff" opacity=".12"/>
+ <path d="M30 260 Q32 180 110 175 Q188 180 190 260" fill="${shirt}"/>
+ <path d="M64 75 Q42 27 110 15 Q190 10 176 100 L185 220 Q160 250 151 185 L60 195 L40 230Z" fill="${hair}"/>
+ <rect x="96" y="147" width="30" height="42" rx="12" fill="${skin}"/>
+ <ellipse cx="110" cy="105" rx="49" ry="61" fill="${skin}"/>
+ <path d="${bangs}" fill="${hair}"/>
+ <path d="M69 105 Q85 92 100 105" fill="none" stroke="${hair}" stroke-width="4"/>
+ <path d="M120 105 Q140 92 153 105" fill="none" stroke="${hair}" stroke-width="4"/>
+ <ellipse cx="89" cy="119" rx="5" ry="6" fill="${eyes}"/>
+ <ellipse cx="135" cy="119" rx="5" ry="6" fill="${eyes}"/>
+ <path d="M105 144 Q115 ${emotion==="happy"?157:151} 127 143" fill="none" stroke="#ae657c" stroke-width="2"/>
+ <ellipse cx="77" cy="139" rx="10" ry="5" fill="#e9a3ac" opacity=".5"/>
+ <ellipse cx="145" cy="139" rx="10" ry="5" fill="#e9a3ac" opacity=".5"/>
+ <path d="M68 260 L80 197 L110 220 L140 197 L155 260" fill="#f1e9ef"/>
+ <path d="M95 190 L110 220 L125 190" fill="none" stroke="#b18ca9" stroke-width="3"/>
+ </svg>`;
 }
 
-function showHelp(){$("help").classList.remove("hidden")}
-function hideHelp(){$("help").classList.add("hidden")}
+function setPortraits(){
+ ["homeA","galleryA"].forEach(id=>document.getElementById(id).innerHTML=portrait("a"));
+ ["homeN","galleryN"].forEach(id=>document.getElementById(id).innerHTML=portrait("n","happy"));
+}
+setPortraits();
+
+// =================================
+// GAME DATA
+// =================================
+
+let S={
+ name:"",a:0,n:0,t:0,j:0,
+ history:[],day:1
+};
+let current="start";
 
 const scenes={
-intro:{
+
+start:{
 chapter:"CHAPTER 01 · MONDAY",
 title:"The New Girl",
-speaker:"NARRATOR",
-text:()=>`Hari pertamamu di Westbridge Academy.\n\nKamu berdiri di depan kelas sambil memperhatikan seluruh murid. Beberapa orang sedang mengobrol, sementara yang lain sibuk dengan ponsel mereka.\n\n"Ah, kamu murid pindahan?"\n\nSeorang perempuan dengan rambut hitam sebahu menghampirimu. Tatapannya tenang.`,
-choices:[
-["Senyum dan memperkenalkan diri.","intro2",{a:2,t:2}],
-["Mengangguk singkat.","intro2",{a:1}],
-["Bercanda agar suasana tidak canggung.","intro2",{n:2}]
+who:"NARRATOR",
+char:"a",
+text:()=>`Hari pertama kamu di Westbridge Academy.
+
+Kamu berdiri di depan kelas sambil memperhatikan sekeliling.
+
+"Hei, kamu murid baru?"
+
+Seorang perempuan berambut hitam panjang menghampirimu.
+
+"Aku Alessia. Senang bertemu denganmu."
+
+Senyumnya kecil, tetapi cukup membuatmu merasa nyaman.`,
+options:[
+["Memperkenalkan diri dengan ramah.","meet",{a:3,t:2}],
+["Tersenyum malu.","meet",{a:2}],
+["Bercanda sedikit.","meet",{n:2}]
 ]},
-intro2:{
+
+meet:{
 chapter:"CHAPTER 01 · MONDAY",
-title:"Two Different Smiles",
-speaker:"ALESSIA",
-text:()=>`"Aku Alessia. Kalau butuh bantuan, bilang saja."\n\nBelum sempat kamu menjawab, seorang perempuan lain tiba-tiba muncul dari belakangnya.\n\n"Alessia! Jangan menculik murid baru dong."\n\nDia tertawa kecil dan menatapmu.\n\n"Aku Naomi. Kamu boleh duduk sama aku kalau mau."`,
-choices:[
-["Aku mau duduk dengan Alessia.","classroom",{a:3,route:"a"}],
-["Aku ikut Naomi saja.","classroom",{n:3,route:"n"}],
-["Kalian berdua boleh jadi temanku?","classroom",{a:1,n:1,t:3}]
+title:"Another Girl",
+who:"NAOMI",
+char:"n",
+text:()=>`"ALLESSIA!"
+
+Seorang perempuan berambut cokelat datang menghampiri kalian.
+
+"Jangan ngobrol berdua terus. Aku juga mau kenalan!"
+
+Dia tertawa.
+
+"Aku Naomi. Kamu boleh duduk denganku nanti."
+
+Alessia hanya menggeleng kecil.`,
+options:[
+["Aku ingin duduk dengan Alessia.","class",{a:4,j:1}],
+["Aku ikut Naomi.","class",{n:4}],
+["Bagaimana kalau kita bertiga?","class",{a:2,n:2,t:3}]
 ]},
-classroom:{
+
+class:{
 chapter:"CHAPTER 01 · MONDAY",
 title:"A Seat Beside You",
-speaker:"NARRATOR",
-text:()=>`Kelas dimulai. Kamu duduk di tempat pilihanmu.\n\nDi tengah pelajaran, sebuah kertas kecil sampai ke mejamu.\n\n${state.route==="n"?"Naomi":"Alessia"} menulis sesuatu di sana:\n\n"Jangan lupa makan siang. Kamu kelihatan belum sarapan."\n\nKamu sedikit tersenyum.`,
-choices:[
-["Balas dengan ucapan terima kasih.","lunch",{a:2,n:2,t:2}],
-["Tulis sesuatu yang sedikit menggoda.","lunch",{a:1,n:3}],
-["Simpan kertas itu tanpa membalas.","lunch",{a:1}]
+who:"ALESSIA",
+char:"a",
+text:()=>`Pelajaran dimulai.
+
+Alessia menggeser bukunya sedikit ke arahmu.
+
+"Kalau ada yang tidak kamu mengerti, tanya saja."
+
+Beberapa menit kemudian, kamu menyadari dia sesekali melirik ke arahmu.`,
+options:[
+["Mengucapkan terima kasih.","lunch",{a:3,t:2}],
+["Menggodanya karena terlalu perhatian.","lunch",{a:3}],
+["Fokus belajar bersamanya.","lunch",{a:2,t:3}]
 ]},
+
 lunch:{
 chapter:"CHAPTER 02 · TUESDAY",
-title:"Lunch Together",
-speaker:"NAOMI",
-text:()=>`Waktu makan siang.\n\nNaomi melambaikan tangan dari meja dekat jendela.\n\n"Hei! Sini!"\n\nAlessia juga ada di sana. Dia sedang membaca buku sambil sesekali melirik ke arahmu.\n\n"Sepertinya hari ini kita makan bertiga," kata Naomi.`,
-choices:[
-["Duduk di sebelah Alessia.","library",{a:3,j:1}],
-["Duduk di sebelah Naomi.","library",{n:3,j:1}],
-["Duduk di tengah mereka.","library",{a:1,n:1,t:3}]
+title:"Lunch Date?",
+who:"NAOMI",
+char:"n",
+text:()=>`Waktu istirahat tiba.
+
+Naomi melambaikan tangan dari kantin.
+
+"Hei! Sini, aku sudah pesan tempat."
+
+Alessia juga berada di sana.
+
+Naomi tersenyum saat kamu datang.
+
+"Mulai sekarang kita makan bareng, ya?"`,
+options:[
+["Duduk di sebelah Naomi.","library",{n:4}],
+["Duduk di sebelah Alessia.","library",{a:4,j:1}],
+["Duduk di tengah mereka.","library",{a:2,n:2,t:3}]
 ]},
+
 library:{
 chapter:"CHAPTER 02 · WEDNESDAY",
-title:"The Library",
-speaker:"ALESSIA",
-text:()=>`Sepulang sekolah, kamu menemukan Alessia sendirian di perpustakaan.\n\n"Kamu suka membaca?" tanyanya.\n\nDia menggeser kursinya sedikit, memberikan ruang di sebelahnya.\n\n"Aku biasanya di sini kalau sedang ingin sendiri. Tapi... hari ini tidak masalah kalau kamu ikut."`,
-choices:[
-["Duduk di sampingnya.","library2",{a:4,t:2}],
-["Tanya kenapa dia sering sendirian.","library2",{a:2,t:3}],
-["Ajak Naomi bergabung lewat chat.","library2",{n:3,j:1}]
+title:"Quiet Afternoon",
+who:"ALESSIA",
+char:"a",
+text:()=>`Sepulang sekolah kamu menemukan Alessia di perpustakaan.
+
+"Kamu suka membaca?"
+
+Dia menutup bukunya.
+
+"Aku biasanya sendirian di sini. Tapi kalau kamu mau menemani, aku tidak keberatan."
+
+Suaranya terdengar sedikit lebih lembut.`,
+options:[
+["Duduk di sampingnya.","chat",{a:4,t:3}],
+["Bertanya tentang buku yang dibacanya.","chat",{a:3,t:3}],
+["Mengajak Naomi bergabung.","chat",{n:3,t:2}]
 ]},
-library2:{
-chapter:"CHAPTER 02 · WEDNESDAY",
-title:"A Little Closer",
-speaker:"NARRATOR",
-text:()=>`Sore itu berlalu dengan tenang.\n\nSebelum pulang, Alessia memberikan sebuah sticky note kepadamu.\n\n"Nomor teleponku. Kalau butuh sesuatu, chat saja."\n\nDia memalingkan wajah. Ujung telinganya sedikit memerah.`,
-choices:[
-["Simpan nomor dan langsung chat.","chat",{a:3,t:2}],
-["Menggoda Alessia karena malu.","chat",{a:3,j:1}],
-["Ucapkan terima kasih.","chat",{a:1,t:2}]
-]},
+
 chat:{
 chapter:"CHAPTER 03 · THURSDAY",
-title:"2:17 AM",
-speaker:"YOUR PHONE",
-text:()=>`Ponselmu bergetar.\n\nAlessia: "Kamu sudah tidur?"\n\nAlessia: "Maaf, aku tahu ini sudah malam."\n\nAlessia: "Aku cuma ingin tahu bagaimana harimu."\n\nKamu menatap layar cukup lama. Ada pesan lain masuk. Kali ini dari Naomi.\n\nNaomi: "Besok pulang bareng aku, ya? No excuses."`,
-choices:[
-["Balas Alessia dengan perhatian.","morning",{a:4,t:3}],
-["Balas Naomi lebih dulu.","morning",{n:4}],
-["Balas keduanya dengan jujur.","morning",{a:2,n:2,t:4}]
+title:"A Message at Night",
+who:"YOUR PHONE",
+char:"n",
+text:()=>`Pukul 22.17.
+
+Alessia:
+"Kamu sudah tidur?"
+
+Alessia:
+"Maaf mengganggu. Aku cuma ingin tahu bagaimana harimu."
+
+Tidak lama kemudian Naomi mengirim pesan.
+
+Naomi:
+"Besok pulang bareng aku, oke?"
+
+Kamu menatap dua notifikasi itu sambil tersenyum.`,
+options:[
+["Balas Alessia dengan perhatian.","jealous",{a:4,t:3}],
+["Balas Naomi dengan candaan.","jealous",{n:4}],
+["Balas keduanya dengan jujur.","jealous",{a:2,n:2,t:4}]
 ]},
-morning:{
+
+jealous:{
 chapter:"CHAPTER 03 · FRIDAY",
-title:"Something Feels Different",
-speaker:"NAOMI",
-text:()=>`Pagi itu Naomi menghampirimu.\n\n"Kamu akhir-akhir ini dekat banget sama Alessia, ya?"\n\nSenyumnya masih ada, tetapi nadanya sedikit berbeda.\n\n"Aku cuma penasaran."\n\nDari kejauhan, Alessia memperhatikan kalian.`,
-choices:[
-["Bilang bahwa kalian hanya berteman.","rain",{n:2,t:2}],
-["Tanya apakah Naomi cemburu.","rain",{n:4,j:2}],
-["Akui bahwa kamu mulai menyukai seseorang.","rain",{a:1,n:1,t:3}]
+title:"A Little Jealous",
+who:"NAOMI",
+char:"n",
+text:()=>`Naomi menghampirimu saat jam istirahat.
+
+"Kamu akhir-akhir ini dekat banget sama Alessia."
+
+Dia memainkan sedotan minumannya.
+
+"Aku cuma penasaran. Kalian ada sesuatu?"
+
+Senyumnya masih ada, tetapi kali ini terlihat sedikit berbeda.`,
+options:[
+["Kami hanya teman.","rain",{n:2,t:2}],
+["Kenapa? Kamu cemburu?","rain",{n:4,j:3}],
+["Aku belum tahu perasaanku.","rain",{t:4}]
 ]},
+
 rain:{
 chapter:"CHAPTER 04 · FRIDAY",
 title:"Under One Umbrella",
-speaker:"NARRATOR",
-text:()=>`Hujan turun deras ketika sekolah selesai.\n\nKamu berdiri di depan gerbang. Alessia datang membawa payung.\n\n"Rumah kita searah. Mau pulang bersama?"\n\nNamun Naomi juga muncul.\n\n"Aku bisa antar kamu. Mobilku sudah di depan."\n\nKeduanya menunggumu menjawab.`,
-choices:[
-["Pulang bersama Alessia.","walk",{a:4,t:2}],
-["Pulang bersama Naomi.","walk",{n:4,t:1}],
-["Bilang kamu ingin pulang sendiri hari ini.","walk",{t:3}]
+who:"NARRATOR",
+char:"a",
+text:()=>`Hujan turun deras setelah sekolah.
+
+Alessia datang membawa payung.
+
+"Mau pulang bersama?"
+
+Namun Naomi muncul dari belakang.
+
+"Aku bisa antar kamu juga."
+
+Keduanya menunggumu memilih.
+
+Suasana menjadi sedikit canggung.`,
+options:[
+["Pulang bersama Alessia.","roof",{a:4,j:1}],
+["Pulang bersama Naomi.","roof",{n:4,j:1}],
+["Pulang sendiri dulu.","roof",{t:4}]
 ]},
-walk:{
-chapter:"CHAPTER 04 · EVENING",
-title:"An Honest Conversation",
-speaker:"NARRATOR",
-text:()=>`Sebelum berpisah, kamu mendapat kesempatan bicara berdua dengan salah satu dari mereka.\n\n${state.a>=state.n?"Alessia":"Naomi"} terlihat ingin mengatakan sesuatu, tetapi terus mengurungkan niatnya.\n\n"Aku boleh tanya sesuatu?"`,
-choices:[
-["Tentu. Cerita saja.","confession",{t:4,a:2,n:2}],
-["Kamu terlihat sedang memikirkan sesuatu.","confession",{t:3,a:2,n:2}],
-["Pegang tangannya dengan lembut.","confession",{a:3,n:3,t:2}]
-]},
-confession:{
+
+roof:{
 chapter:"CHAPTER 05 · MONDAY",
-title:"The Confession",
-speaker:"NARRATOR",
-text:()=>`Hari-hari berlalu. Hubungan kalian semakin dekat.\n\nSore ini, salah satu dari mereka mengajakmu ke rooftop sekolah.\n\n${state.a>state.n?"Alessia berdiri di dekat pagar. Rambutnya bergerak tertiup angin.":"Naomi berdiri di dekat pintu. Biasanya dia banyak bicara, tetapi sekarang terlihat gugup."}\n\n"Aku tidak tahu harus mulai dari mana..."`,
-choices:[
-["Aku akan mendengarkan.","confession2",{t:4}],
-["Katakan saja apa yang kamu rasakan.","confession2",{a:2,n:2}],
-["Aku juga ingin bicara tentang perasaanku.","confession2",{a:2,n:2,t:2}]
+title:"Rooftop Confession",
+who:"NARRATOR",
+char:"a",
+text:()=>`Sore hari di rooftop sekolah.
+
+Salah satu dari mereka mengajakmu bicara.
+
+Alessia terlihat gugup. Naomi yang biasanya ceria juga tampak berbeda.
+
+"Aku sebenarnya sudah ingin mengatakan sesuatu sejak lama..."
+
+Angin sore berembus pelan.`,
+options:[
+["Aku mendengarkan.","confess",{t:4,a:2,n:2}],
+["Katakan saja, aku tidak akan menghakimi.","confess",{t:3}],
+["Aku juga punya sesuatu untuk dikatakan.","confess",{a:2,n:2,t:3}]
 ]},
-confession2:{
+
+confess:{
 chapter:"CHAPTER 05 · MONDAY",
-title:"Almost Us",
-speaker:"NARRATOR",
-text:()=>`Dia menarik napas panjang.\n\n"Aku mulai menyukaimu. Bukan sekadar teman."\n\nUntuk pertama kalinya, tidak ada candaan atau obrolan ringan.\n\nHanya kalian berdua, dan perasaan yang selama ini disimpan.`,
-choices:[
-["Aku juga menyukaimu.","final",{a:4,n:4,t:3}],
-["Aku butuh waktu untuk memahami perasaanku.","final",{t:4}],
-["Aku tidak ingin kehilangan persahabatan kita.","final",{t:3}]
+title:"The Truth",
+who:"NARRATOR",
+char:"n",
+text:()=>`Dia akhirnya menatap matamu.
+
+"Aku mulai menyukaimu."
+
+Hening sejenak.
+
+"Bukan cuma sebagai teman."
+
+Kamu menyadari bahwa hubungan kalian tidak akan sama lagi setelah hari ini.`,
+options:[
+["Aku juga menyukaimu.","final",{a:3,n:3,t:3}],
+["Aku butuh waktu.","final",{t:4}],
+["Aku takut kehilangan kalian.","final",{t:3}]
 ]},
+
 final:{
 chapter:"CHAPTER 06 · FINAL",
-title:"Choose Your Ending",
-speaker:"NARRATOR",
-text:()=>`Hari terakhir semester tiba.\n\nKamu berdiri di halaman sekolah, mengingat semua hal yang sudah terjadi.\n\nDua perempuan itu memiliki tempat berbeda di hatimu.\n\nSekarang, kamu harus menentukan apa yang sebenarnya kamu inginkan.`,
-choices:[
+title:"Choose Your Heart",
+who:"NARRATOR",
+char:"a",
+text:()=>`Hari terakhir semester.
+
+Kamu berdiri di halaman sekolah, mengingat semua kenangan yang telah kalian buat.
+
+Sekarang waktunya menentukan jalan ceritamu.
+
+Siapa yang ingin kamu pilih?`,
+options:[
 ["Aku memilih Alessia.","endA",{}],
 ["Aku memilih Naomi.","endN",{}],
-["Aku belum siap memilih siapa pun.","endF",{}],
-["Aku ingin mencoba hubungan bertiga dengan jujur.","endT",{t:3}]
+["Aku memilih diriku sendiri.","endF",{}],
+["Aku ingin jujur kepada keduanya.","endT",{t:3}]
 ]}
+
 };
 
-function ending(id){
- const endings={
- endA:{
- title:"ENDING 01 — ONLY YOU",
- text:`Kamu memilih Alessia.\n\nDia tersenyum kecil, lalu menggenggam tanganmu.\n\n"Aku tidak pandai mengungkapkan perasaan. Tapi aku ingin mencoba, bersamamu."\n\nNaomi akhirnya menerima keputusanmu. Meski sedikit sedih, dia tetap menjadi teman kalian.\n\nDi bawah langit sore Westbridge, kalian memulai sesuatu yang baru.`
- },
- endN:{
- title:"ENDING 02 — MY FAVORITE PERSON",
- text:`Kamu memilih Naomi.\n\n"Serius? Kamu benar-benar memilih aku?" Dia tertawa tidak percaya.\n\nNaomi memelukmu dengan hangat.\n\n"Aku janji akan berusaha membuatmu bahagia. Tapi kalau aku mulai menyebalkan, tegur aku, ya."\n\nUntuk pertama kalinya, Naomi terlihat benar-benar gugup.`
- },
- endF:{
- title:"ENDING 03 — NOT YET",
- text:`Kamu memilih dirimu sendiri.\n\nAlessia dan Naomi memahami keputusanmu.\n\nKamu masih punya banyak hal untuk dipelajari tentang cinta dan dirimu sendiri.\n\nTidak semua cerita harus berakhir dengan memiliki seseorang. Terkadang, bahagia juga berarti memberi waktu untuk diri sendiri.`
- },
- endT:{
- title:"ENDING 04 — THREE HEARTS",
- text:`Kamu memilih untuk jujur tentang perasaanmu kepada keduanya.\n\nAwalnya mereka terkejut. Setelah banyak percakapan, batasan, dan kejujuran, kalian memutuskan untuk mencoba hubungan yang disepakati bersama.\n\nTidak mudah, tetapi kali ini tidak ada yang harus berpura-pura atau menyembunyikan perasaan.`
- }
+// =================================
+// ENDINGS
+// =================================
+
+const endings={
+endA:{
+title:"ONLY YOU — Alessia",
+text:`Kamu memilih Alessia.
+
+Dia menggenggam tanganmu dengan lembut.
+
+"Aku tidak pandai mengatakan perasaan. Tapi aku ingin mencoba, bersamamu."
+
+Alessia tersenyum kecil.
+
+Di bawah langit sore, kalian memulai cerita baru.
+
+Sometimes, love is quiet. But it is still love. ♡`
+},
+endN:{
+title:"MY FAVORITE PERSON — Naomi",
+text:`Kamu memilih Naomi.
+
+"Serius? Kamu memilih aku?"
+
+Dia tertawa, kemudian memelukmu.
+
+"Aku janji akan berusaha membuatmu bahagia."
+
+Naomi yang biasanya percaya diri kini terlihat sangat malu.
+
+And maybe, this is where your story begins. ♡`
+},
+endF:{
+title:"A LITTLE MORE TIME",
+text:`Kamu memilih dirimu sendiri.
+
+Alessia dan Naomi memahami keputusanmu.
+
+Kamu masih punya banyak hal untuk dipelajari tentang dirimu dan cinta.
+
+Tidak semua cerita harus berakhir dengan memiliki seseorang.
+
+Sometimes, choosing yourself is enough. ♡`
+},
+endT:{
+title:"THREE HEARTS",
+text:`Kamu memilih untuk jujur kepada keduanya.
+
+Setelah percakapan panjang, kalian sepakat untuk mencoba hubungan dengan batasan dan persetujuan yang jelas.
+
+Tidak ada yang harus berpura-pura.
+
+A different kind of love story begins. ♡`
+}
+};
+
+// =================================
+// ENGINE
+// =================================
+
+function show(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+}
+
+function newGame(){
+ S={
+ name:document.getElementById("player").value.trim()||"Rei",
+ a:0,n:0,t:0,j:0,history:[],day:1
  };
- const e=endings[id];
- $("play").classList.add("hidden");
- $("ending").classList.remove("hidden");
- $("endingTitle").textContent=e.title;
- $("endingText").textContent=e.text;
- localStorage.setItem("betweenUsEnding",e.title);
+ current="start";
+ localStorage.removeItem("betweenSave");
+ show("game");
+ render();
 }
 
 function render(){
  const s=scenes[current];
  if(!s)return;
- $("chapter").textContent=s.chapter;
- $("title").textContent=s.title;
- $("speaker").textContent=s.speaker;
- $("story").textContent=s.text();
- $("choices").innerHTML="";
- s.choices.forEach(c=>{
-  const b=document.createElement("button");
+
+ document.getElementById("chapter").textContent=s.chapter;
+ document.getElementById("title").textContent=s.title;
+ document.getElementById("speaker").textContent=s.who;
+ document.getElementById("dialogue").textContent=
+ s.text().replaceAll("kamu",S.name).replaceAll("Kamu",S.name);
+
+ document.getElementById("illustration").innerHTML=
+ portrait(s.char,"normal");
+
+ const box=document.getElementById("choices");
+ box.innerHTML="";
+
+ s.options.forEach(option=>{
+  let b=document.createElement("button");
   b.className="choice";
-  b.textContent=c[0];
-  b.onclick=()=>choose(c);
-  $("choices").appendChild(b);
+  b.textContent="♡ "+option[0];
+  b.onclick=()=>choose(option);
+  box.appendChild(b);
  });
+
  updateStats();
- $("log").textContent=state.log.join("  •  ")||"Belum ada cerita.";
+ document.getElementById("history").textContent=
+ S.history.join("  •  ")||"Your story begins...";
 }
 
-function choose(c){
- const [label,next,effect]=c;
- state.a=Math.max(0,Math.min(100,state.a+(effect.a||0)));
- state.n=Math.max(0,Math.min(100,state.n+(effect.n||0)));
- state.t=Math.max(0,Math.min(100,state.t+(effect.t||0)));
- state.j=Math.max(0,Math.min(100,state.j+(effect.j||0)));
- if(effect.route)state.route=effect.route;
- state.log.push(label);
+function choose(option){
+ let [label,next,effect]=option;
+
+ S.a=Math.min(100,S.a+(effect.a||0));
+ S.n=Math.min(100,S.n+(effect.n||0));
+ S.t=Math.min(100,S.t+(effect.t||0));
+ S.j=Math.min(100,S.j+(effect.j||0));
+
+ S.history.push(label);
  current=next;
- if(next.startsWith("end")){ending(next);return}
+
+ if(endings[next]){
+  let ending=endings[next];
+  document.getElementById("endTitle").textContent=ending.title;
+  document.getElementById("endText").textContent=ending.text;
+  show("ending");
+  return;
+ }
+
  render();
 }
 
 function updateStats(){
- [["aNum","aBar",state.a],["nNum","nBar",state.n],["trustNum","tBar",state.t]].forEach(x=>{
- $(x[0]).textContent=x[2];
- $(x[1]).style.width=x[2]+"%";
+ [["aNum","aBar",S.a],["nNum","nBar",S.n],
+ ["tNum","tBar",S.t]].forEach(x=>{
+  document.getElementById(x[0]).textContent=x[2];
+  document.getElementById(x[1]).style.width=
+  x[2]+"%";
  });
 }
 
-function saveGame(){
- localStorage.setItem("betweenUsSave",JSON.stringify({state,current}));
- alert("Game berhasil disimpan!");
+// =================================
+// SAVE SYSTEM
+// =================================
+
+function save(){
+ localStorage.setItem("betweenSave",
+ JSON.stringify({S,current}));
+ alert("Game saved successfully!");
 }
 
-function continueGame(){
- const data=localStorage.getItem("betweenUsSave");
- if(!data){alert("Belum ada save game!");return}
+function resume(){
+ let raw=localStorage.getItem("betweenSave");
+ if(!raw){
+  alert("Belum ada save game.");
+  return;
+ }
  try{
- const d=JSON.parse(data);
- state=d.state;current=d.current;
- $("home").classList.add("hidden");
- $("play").classList.remove("hidden");
- $("ending").classList.add("hidden");
- render();
- }catch(e){alert("Save tidak bisa dibaca.")}
+  let data=JSON.parse(raw);
+  S=data.S;
+  current=data.current;
+  show("game");
+  render();
+ }catch(e){
+  alert("Save game rusak.");
+ }
 }
 
-function goHome(){
- $("play").classList.add("hidden");
- $("ending").classList.add("hidden");
- $("help").classList.add("hidden");
- $("home").classList.remove("hidden");
+function showGallery(){
+ show("gallery");
 }
 
 </script>
