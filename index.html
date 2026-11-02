@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OBSESSION | Dark Romance</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap');
+*{box-sizing:border-box}
+body{
+ margin:0;background:#09070a;color:#eee;
+ font-family:Montserrat,sans-serif;
+ min-height:100vh;
+}
+button{font:inherit;cursor:pointer}
+#app{max-width:760px;margin:auto;min-height:100vh;background:#100d12}
+header{
+ padding:28px 15px;text-align:center;
+ background:linear-gradient(145deg,#300d20,#100d12);
+ border-bottom:1px solid #543040;
+}
+h1{font:600 36px Cinzel,serif;letter-spacing:9px;color:#d77b91;margin:0}
+header p{font-size:9px;letter-spacing:4px;color:#b99ba5}
+main{padding:22px}
+.cover{
+ height:220px;display:flex;align-items:end;
+ padding:20px;
+ background:linear-gradient(0deg,#09070a,transparent),linear-gradient(130deg,#41152a,#17111b,#08090d);
+ border:1px solid #49283a;
+}
+.cover h2{font:25px Cinzel,serif;color:#e4a0b0}
+.small{font-size:11px;color:#a99ba3;line-height:1.8}
+.stats{display:flex;gap:10px;margin:18px 0}
+.stat{flex:1;background:#1b151d;padding:12px;border:1px solid #382632;font-size:10px;color:#b99ba5}
+.stat b{display:block;color:#e5a2b4;font-size:17px;margin-top:5px}
+#chapter{font-size:10px;letter-spacing:3px;color:#d77b91;margin:28px 0 12px}
+#character{font:20px Cinzel,serif;color:#d77b91;margin-bottom:15px}
+#story{font-size:14px;line-height:2;color:#ddd;white-space:pre-line;min-height:150px}
+#choices{display:grid;gap:11px;margin-top:25px}
+.choice{
+ background:#211822;color:#eee;border:1px solid #573447;
+ text-align:left;padding:16px;line-height:1.5;
+ transition:.2s;
+}
+.choice:hover{background:#492034;border-color:#cf718a}
+.action{
+ padding:12px 17px;background:#7b314d;
+ color:white;border:0;margin:8px 5px 8px 0;
+}
+.action.secondary{background:#29212c;border:1px solid #624354}
+footer{text-align:center;padding:25px;color:#796c76;font-size:10px}
+#ending{font:23px Cinzel,serif;color:#df8ca2;margin:25px 0}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+<h1>OBSESSION</h1>
+<p>A DARK ROMANCE INTERACTIVE NOVEL</p>
+</header>
+<main>
+<div id="home">
+ <div class="cover"><h2>Love can be beautiful.<br>Obsession cannot.</h2></div>
+ <p class="small">
+ A mysterious stranger. A forgotten past. A love story full of secrets.
+ Every decision changes your future.
+ </p>
+ <button class="action" onclick="start()">NEW GAME</button>
+ <button class="action secondary" onclick="continueGame()">CONTINUE</button>
+ <button class="action secondary" onclick="showRules()">HOW TO PLAY</button>
+ <p class="small">18+ themes are not included. Psychological suspense and romance.</p>
+</div>
+
+<div id="game" class="hidden">
+<div class="stats">
+ <div class="stat">AFFECTION<b id="aff">0</b></div>
+ <div class="stat">TRUST<b id="trust">0</b></div>
+ <div class="stat">SUSPICION<b id="susp">0</b></div>
+</div>
+<div id="chapter"></div>
+<div id="character"></div>
+<div id="story"></div>
+<div id="choices"></div>
+</div>
+
+<div id="endingScreen" class="hidden">
+<div class="cover"><h2>THE END</h2></div>
+<div id="ending"></div>
+<p id="endingText" class="small"></p>
+<p class="small" id="endingStats"></p>
+<button class="action" onclick="start()">PLAY AGAIN</button>
+<button class="action secondary" onclick="home()">MAIN MENU</button>
+</div>
+
+<div id="rules" class="hidden">
+<h2 style="font-family:Cinzel">HOW TO PLAY</h2>
+<p class="small">Pilih setiap dialog sesuai keinginanmu. Setiap pilihan akan mengubah hubunganmu dengan Adrian dan menentukan ending yang akan kamu dapatkan.</p>
+<button class="action" onclick="home()">BACK</button>
+</div>
+</main>
+<footer>OBSESSION — EVERY CHOICE HAS A CONSEQUENCE</footer>
+</div>
+<script>
+const scenes={
+start:{
+ch:"PROLOGUE — THE LETTER",who:"Narrator",
+text:`Hujan turun deras malam ini.
+
+Kau baru saja pindah ke sebuah apartemen tua di pusat kota. Tempat yang cukup jauh dari kehidupan lamamu.
+
+Saat membuka pintu, sebuah amplop hitam tergeletak di lantai.
+
+Tidak ada nama pengirim. Hanya sebuah tulisan tangan:
+
+"Finally, you're home."
+
+Aneh. Tidak ada yang tahu alamat barumu.`,
+choices:[
+["Membuka amplop.", "letter", {susp:1}],
+["Membuangnya.", "trash", {trust:1}],
+["Mencari siapa yang mengirimnya.", "outside", {susp:2}]
+]},
+letter:{
+ch:"CHAPTER 01 — UNKNOWN",who:"Narrator",
+text:`Di dalam amplop terdapat sebuah foto seorang pria.
+
+Di belakang foto tertulis:
+
+"Adrian. Jangan percaya padanya."
+
+Tiba-tiba ponselmu bergetar. Sebuah pesan masuk dari nomor tak dikenal.
+
+"Foto itu masih ada padamu?"`,
+choices:[
+["Balas: Siapa kamu?", "adrian", {trust:1}],
+["Tanya dari mana dia tahu.", "adrian", {susp:1}],
+["Blokir nomor tersebut.", "blocked", {susp:1}]
+]},
+trash:{
+ch:"CHAPTER 01 — THE MESSAGE",who:"Narrator",
+text:`Kau membuang amplop itu ke tempat sampah.
+
+Namun beberapa menit kemudian, seseorang mengetuk pintumu tiga kali.
+
+Ketika kau membuka pintu, tidak ada siapa-siapa.
+
+Hanya ada sebuah ponsel tua di lantai. Layarnya menyala.
+
+Satu pesan:
+
+"Jangan membuang sesuatu yang belum kau pahami."`,
+choices:[
+["Mengambil ponsel itu.", "adrian", {susp:1}],
+["Menutup pintu dan menelepon teman.", "friend", {trust:1}]
+]},
+outside:{
+ch:"CHAPTER 01 — THE STRANGER",who:"Narrator",
+text:`Kau membuka pintu dan melihat seorang pria berdiri di ujung lorong.
+
+Kemeja hitam. Rambut sedikit berantakan. Tatapan yang sulit dijelaskan.
+
+Dia tersenyum tipis.
+
+"Seharusnya kau tidak keluar malam-malam."
+
+Sebelum kau sempat bertanya, dia berjalan pergi.`,
+choices:[
+["Mengejarnya.", "adrian", {aff:1,susp:1}],
+["Memanggilnya.", "adrian", {trust:1}],
+["Mengabaikannya.", "friend", {susp:0}]
+]},
+blocked:{
+ch:"CHAPTER 02 — ADRIAN",who:"Adrian",
+text:`Keesokan paginya, seorang pria duduk di kafe dekat apartemenmu.
+
+Dia memperhatikanmu sebelum akhirnya berbicara.
+
+"Jadi, kau memblokir nomorku."
+
+Dia tersenyum kecil.
+
+"Namaku Adrian. Dan sepertinya kita perlu bicara."`,
+choices:[
+["Duduk dan mendengarkannya.", "cafe", {aff:1,trust:1}],
+["Menolak dengan dingin.", "street", {susp:1}],
+["Bertanya tentang foto itu.", "secret", {trust:1}]
+]},
+adrian:{
+ch:"CHAPTER 02 — FIRST MEETING",who:"Adrian",
+text:`"Namaku Adrian."
+
+Suaranya tenang, hampir terlalu tenang.
+
+"Aku mengenal seseorang dari masa lalumu."
+
+Dia menatapmu beberapa detik.
+
+"Kau tidak perlu percaya padaku sekarang. Tapi jangan terlalu mudah percaya pada orang lain."
+
+Dia menyodorkan kartu namanya.`,
+choices:[
+["Menerima kartu itu.", "cafe", {aff:1}],
+["Bertanya apa maksudnya.", "secret", {trust:1}],
+["Pergi tanpa mengatakan apa-apa.", "street", {susp:1}]
+]},
+friend:{
+ch:"CHAPTER 02 — SOMEONE ELSE",who:"Narrator",
+text:`Kau menelepon teman lamamu, Noah.
+
+Dia terdengar terkejut ketika mendengar nama Adrian.
+
+"Jangan dekat-dekat dengannya."
+
+Noah terdiam sebentar.
+
+"Aku akan menjelaskan semuanya. Tapi bukan lewat telepon."`,
+choices:[
+["Menemui Noah.", "noah", {trust:1}],
+["Tetap mencari Adrian.", "cafe", {aff:1}],
+["Meminta Noah menjelaskan sekarang.", "secret", {susp:1}]
+]},
+cafe:{
+ch:"CHAPTER 03 — COFFEE & SECRETS",who:"Adrian",
+text:`Kafe itu hampir kosong.
+
+Adrian duduk di hadapanmu. Dia mengaduk kopinya tanpa meminumnya.
+
+"Aku tidak pandai menjelaskan sesuatu yang rumit."
+
+Dia mengeluarkan sebuah foto lama.
+
+Di dalam foto itu ada dua orang: Adrian dan seseorang yang sangat mirip denganmu.
+
+"Kau tahu siapa dia?"`,
+choices:[
+["Mengatakan bahwa itu mirip keluargamu.", "secret", {trust:2}],
+["Meminta dia berhenti bermain teka-teki.", "secret", {susp:1}],
+["Bertanya kenapa dia menyimpan foto itu.", "past", {aff:1}]
+]},
+street:{
+ch:"CHAPTER 03 — DISTANCE",who:"Narrator",
+text:`Kau meninggalkan kafe.
+
+Di perjalanan pulang, sebuah mobil hitam berhenti di dekat trotoar.
+
+Jendelanya turun.
+
+Adrian.
+
+"Aku tidak akan mengikutimu. Aku hanya ingin memberikan ini."
+
+Dia meletakkan sebuah kunci di atas kap mobil.
+
+"Gudang lama. Cari jawabannya di sana."`,
+choices:[
+["Mengambil kunci itu.", "warehouse", {trust:1}],
+["Menolak dan pergi.", "noah", {susp:1}]
+]},
+secret:{
+ch:"CHAPTER 04 — THE SECRET",who:"Adrian",
+text:`Adrian menarik napas panjang.
+
+"Tujuh tahun lalu, ada sebuah kejadian yang mengubah hidup keluargamu."
+
+Dia menyerahkan sebuah dokumen.
+
+Sebuah nama tertulis di sana. Nama yang selama ini tidak pernah kau dengar.
+
+"Orang itu masih hidup."
+
+Tatapannya berubah serius.`,
+choices:[
+["Membaca dokumen itu.", "past", {trust:2}],
+["Menanyakan hubungan Adrian dengan orang itu.", "past", {aff:1}],
+["Menuduhnya menyembunyikan sesuatu.", "noah", {susp:2}]
+]},
+noah:{
+ch:"CHAPTER 04 — NOAH",who:"Noah",
+text:`Noah menunggumu di sebuah restoran kecil.
+
+"Aku tahu Adrian."
+
+Dia membuka ponselnya dan menunjukkan sebuah berita lama.
+
+"Dia pernah kehilangan seseorang. Sejak itu dia berubah."
+
+Noah menatapmu.
+
+"Tapi ada sesuatu yang belum dia ceritakan."`,
+choices:[
+["Meminta Noah melanjutkan.", "past", {trust:2}],
+["Membela Adrian.", "adrianhouse", {aff:1}],
+["Bertanya apakah Noah juga berbohong.", "past", {susp:1}]
+]},
+past:{
+ch:"CHAPTER 05 — SEVEN YEARS AGO",who:"Narrator",
+text:`Tujuh tahun lalu.
+
+Sebuah kecelakaan terjadi di jalan pegunungan. Dua orang menghilang malam itu.
+
+Salah satunya adalah kakak Adrian.
+
+Yang satunya lagi adalah seseorang dari keluargamu.
+
+Kau mulai mengerti mengapa Adrian mendekatimu.
+
+Namun apakah itu benar-benar satu-satunya alasan?`,
+choices:[
+["Mengunjungi rumah Adrian.", "adrianhouse", {aff:1}],
+["Mencari arsip kecelakaan.", "archive", {trust:2}],
+["Menghadapi Adrian secara langsung.", "confront", {susp:1}]
+]},
+warehouse:{
+ch:"CHAPTER 05 — THE WAREHOUSE",who:"Narrator",
+text:`Gudang itu berdebu dan hampir kosong.
+
+Di sebuah laci, kau menemukan kotak berisi surat-surat lama.
+
+Salah satu surat ditulis oleh Adrian.
+
+"Aku sudah mencoba melupakan semuanya. Tapi setiap kali melihatnya, aku ingat malam itu."
+
+Tiba-tiba terdengar suara langkah kaki.`,
+choices:[
+["Bersembunyi.", "confront", {susp:1}],
+["Memanggil orang itu.", "adrianhouse", {trust:1}],
+["Membawa surat dan pergi.", "archive", {trust:1}]
+]},
+archive:{
+ch:"CHAPTER 06 — THE ARCHIVE",who:"Narrator",
+text:`Arsip lama itu berisi dokumen kecelakaan.
+
+Kau menemukan sebuah laporan yang telah diubah.
+
+Ada tanda tangan Adrian di halaman terakhir.
+
+Namun ada juga nama Noah.
+
+Seseorang telah berbohong selama tujuh tahun.
+
+Pertanyaannya: siapa?`,
+choices:[
+["Menemui Adrian dengan dokumen itu.", "confront", {aff:1}],
+["Menemui Noah.", "noahtruth", {trust:1}],
+["Menyimpan dokumen dan menyelidiki sendiri.", "alone", {susp:1}]
+]},
+adrianhouse:{
+ch:"CHAPTER 06 — HIS HOUSE",who:"Adrian",
+text:`Rumah Adrian sangat besar, tetapi terasa kosong.
+
+Banyak buku, lukisan, dan foto lama memenuhi ruangan.
+
+Dia berdiri di dekat jendela.
+
+"Kau datang."
+
+Dia menoleh.
+
+"Aku sudah tahu suatu hari kau akan menemukan semuanya."
+
+Untuk pertama kalinya, dia terlihat takut.`,
+choices:[
+["Mengajaknya bicara baik-baik.", "romance", {aff:2,trust:1}],
+["Menuntut semua jawaban.", "confront", {susp:1}],
+["Mengatakan bahwa kau ingin pergi.", "alone", {trust:1}]
+]},
+confront:{
+ch:"CHAPTER 07 — CONFRONTATION",who:"Adrian",
+text:`"Baik. Aku akan mengatakan semuanya."
+
+Adrian meletakkan sebuah map di atas meja.
+
+"Aku memang menyembunyikan laporan itu. Bukan untuk melindungi diriku."
+
+Dia menatapmu.
+
+"Aku melakukannya karena ada seseorang yang mengancam keluargamu."
+
+Hening.
+
+"Aku seharusnya memberitahumu lebih awal."`,
+choices:[
+["Memberinya kesempatan menjelaskan.", "romance", {aff:2,trust:1}],
+["Meminta bukti.", "noahtruth", {trust:2}],
+["Mengakhiri semuanya.", "alone", {susp:2}]
+]},
+noahtruth:{
+ch:"CHAPTER 07 — BETRAYAL",who:"Noah",
+text:`Noah akhirnya mengakui sesuatu.
+
+Dia mengetahui lebih banyak tentang kecelakaan itu daripada yang pernah dia katakan.
+
+"Aku takut kau akan membenciku."
+
+Dia mengeluarkan sebuah rekaman suara.
+
+Suara di dalamnya sangat familiar.
+
+Suara Adrian.
+
+Tapi isi rekaman itu jauh berbeda dari pengakuannya.`,
+choices:[
+["Mendengarkan sampai selesai.", "truth", {trust:2}],
+["Membawa rekaman itu ke Adrian.", "confront", {aff:1}],
+["Tidak mempercayai siapa pun lagi.", "alone", {susp:2}]
+]},
+romance:{
+ch:"CHAPTER 08 — CLOSER",who:"Adrian",
+text:`Malam semakin larut.
+
+Adrian membuatkanmu teh.
+
+"Aku tidak tahu bagaimana cara meminta seseorang untuk tinggal."
+
+Dia duduk di sampingmu, menjaga jarak.
+
+"Tapi kalau kau memilih pergi, aku tidak akan menahanmu."
+
+Tatapannya melembut.
+
+"Setidaknya, izinkan aku jujur sekali ini."`,
+choices:[
+["Menggenggam tangannya.", "promise", {aff:3,trust:1}],
+["Bertanya apakah dia benar-benar mencintaimu.", "promise", {aff:2}],
+["Meminta waktu untuk berpikir.", "alone", {trust:1}]
+]},
+alone:{
+ch:"CHAPTER 08 — ALONE",who:"Narrator",
+text:`Kau memutuskan menjauh dari semua orang.
+
+Kau menyewa kamar kecil dan mulai menyelidiki semuanya sendiri.
+
+Namun malam itu, ada surat di bawah pintu.
+
+Tidak ada ancaman. Tidak ada nama.
+
+Hanya satu kalimat:
+
+"Truth is closer than you think."`,
+choices:[
+["Mencari siapa pengirimnya.", "truth", {trust:2}],
+["Menelepon Adrian.", "promise", {aff:1}],
+["Membakar surat itu.", "final", {susp:2}]
+]},
+truth:{
+ch:"CHAPTER 09 — THE REAL TRUTH",who:"Narrator",
+text:`Rekaman itu akhirnya menjelaskan semuanya.
+
+Kecelakaan tujuh tahun lalu bukanlah kecelakaan biasa.
+
+Seseorang sengaja mengubah laporan untuk menyembunyikan sebuah kejahatan.
+
+Adrian mengetahui sebagian kebenaran, Noah mengetahui sisanya.
+
+Dan kini kau memegang bukti terakhir.
+
+Semuanya tergantung keputusanmu.`,
+choices:[
+["Membongkar semuanya kepada polisi.", "justice", {trust:3}],
+["Memberitahu Adrian terlebih dahulu.", "promise", {aff:1}],
+["Mencari pelaku sebenarnya.", "final", {susp:1}]
+]},
+promise:{
+ch:"CHAPTER 09 — A PROMISE",who:"Adrian",
+text:`Adrian berdiri di hadapanmu.
+
+"Aku tidak bisa menjanjikan hidup yang sempurna."
+
+Dia menarik napas.
+
+"Tapi aku bisa berjanji tidak akan membuat keputusan untukmu lagi."
+
+Dia mengulurkan tangannya.
+
+"Jadi, apa yang ingin kau lakukan?"`,
+choices:[
+["Memilih memulai hubungan dengannya.", "loveend", {aff:3,trust:2}],
+["Memilih tetap berteman.", "neutralend", {trust:2}],
+["Mengucapkan selamat tinggal.", "freedom", {susp:1}]
+]},
+justice:{
+ch:"FINAL CHAPTER — JUSTICE",who:"Narrator",
+text:`Bukti diserahkan kepada pihak berwenang.
+
+Beberapa minggu kemudian, kasus itu kembali dibuka.
+
+Adrian memberikan kesaksiannya. Noah juga.
+
+Tidak ada yang bisa mengubah masa lalu, tetapi kebenaran akhirnya ditemukan.
+
+Untuk pertama kalinya, kau merasa bebas.`,
+choices:[
+["Melanjutkan hidup.", "goodend", {trust:2}],
+["Menemui Adrian sekali lagi.", "neutralend", {aff:1}]
+]},
+final:{
+ch:"FINAL CHAPTER — THE LAST SECRET",who:"Narrator",
+text:`Kau menemukan sebuah nama di halaman terakhir dokumen.
+
+Nama seseorang yang selama ini tidak pernah dicurigai.
+
+Ketika kau menyadari siapa orang itu, ponselmu berdering.
+
+Adrian.
+
+"Jangan lakukan sesuatu yang akan kau sesali."
+
+Kali ini, kau yang menentukan akhir cerita.`,
+choices:[
+["Mengungkap identitas pelaku.", "goodend", {trust:2}],
+["Menyimpan rahasia itu.", "badend", {susp:3}],
+["Pergi tanpa menjelaskan apa pun.", "freedom", {trust:1}]
+]},
+loveend:{
+end:"TRUE ENDING — A LOVE WITHOUT LIES",
+text:"Kau dan Adrian memulai hubungan baru. Tidak ada rahasia yang sengaja disembunyikan, tidak ada paksaan untuk tinggal. Kalian belajar bahwa cinta bukan tentang memiliki seseorang, tetapi tentang saling memilih setiap hari."
+},
+neutralend:{
+end:"BITTERSWEET ENDING — BETWEEN US",
+text:"Adrian tetap menjadi seseorang yang penting dalam hidupmu. Namun kalian memilih jalan yang berbeda. Ada perasaan yang belum selesai, tetapi tidak semua kisah harus berakhir dengan hubungan romantis."
+},
+freedom:{
+end:"FREEDOM ENDING — YOUR OWN STORY",
+text:"Kau meninggalkan kota itu. Tanpa Adrian, tanpa Noah, dan tanpa rahasia masa lalu. Untuk pertama kalinya, masa depan sepenuhnya milikmu."
+},
+goodend:{
+end:"GOOD ENDING — THE TRUTH",
+text:"Kebenaran akhirnya terungkap. Semua orang yang terlibat harus bertanggung jawab. Kau berhasil mendapatkan jawaban tanpa kehilangan dirimu sendiri."
+},
+badend:{
+end:"BAD ENDING — THE LAST LIE",
+text:"Kau memilih menyimpan rahasia. Adrian pergi tanpa mengatakan apa-apa lagi. Beberapa tahun kemudian, sebuah amplop hitam kembali muncul di depan pintumu. Di dalamnya ada satu foto baru."
+}
+};
+
+let stats={aff:0,trust:0,susp:0};
+let current="start";
+let history=[];
+let endings=0;
+
+function save(){
+ localStorage.setItem("obsessionSave",JSON.stringify({
+ current,stats,history,endings
+ }));
+}
+function start(){
+ stats={aff:0,trust:0,susp:0};
+ current="start";history=[];endings=0;
+ show("game");render();save();
+}
+function show(id){
+ ["home","game","endingScreen","rules"].forEach(x=>
+ document.getElementById(x).classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+}
+function home(){show("home")}
+function showRules(){show("rules")}
+function continueGame(){
+ let s=localStorage.getItem("obsessionSave");
+ if(!s){start();return}
+ try{
+ let d=JSON.parse(s);
+ current=d.current;stats=d.stats;history=d.history||[];
+ endings=d.endings||0;show("game");render();
+ }catch(e){start()}
+}
+function render(){
+ let s=story[current];
+ if(!s){ending(current);return}
+ document.getElementById("chapter").textContent=s.ch;
+ document.getElementById("character").textContent=s.who;
+ document.getElementById("story").textContent=s.text;
+ document.getElementById("aff").textContent=stats.aff;
+ document.getElementById("trust").textContent=stats.trust;
+ document.getElementById("susp").textContent=stats.susp;
+ let c=document.getElementById("choices");
+ c.innerHTML="";
+ s.choices.forEach(([label,next,change])=>{
+  let b=document.createElement("button");
+  b.className="choice";b.textContent=label;
+  b.onclick=()=>choose(next,change);
+  c.appendChild(b);
+ });
+ save();
+}
+function choose(next,change){
+ history.push(current);
+ Object.keys(change).forEach(k=>stats[k]+=change[k]);
+ current=next;
+ if(story[current])render();else ending(current);
+}
+function ending(id){
+ let e=story[id];
+ if(!e||!e.end)return;
+ endings++;
+ show("endingScreen");
+ document.getElementById("ending").textContent=e.end;
+ document.getElementById("endingText").textContent=e.text;
+ document.getElementById("endingStats").textContent=
+ "Affection: "+stats.aff+" | Trust: "+stats.trust+
+ " | Suspicion: "+stats.susp+
+ " | Ending unlocked: "+endings;
+ localStorage.removeItem("obsessionSave");
+}
+</script>
+</body>
+  </html>
+  
