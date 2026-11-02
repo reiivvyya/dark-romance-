@@ -4,595 +4,390 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OBSESSION - Dark Romance</title>
+<title>Between Us — WLW Dating Sim</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap');
 *{box-sizing:border-box}
-body{margin:0;background:#09070a;color:#eee;font-family:Montserrat,sans-serif}
-button{font:inherit;cursor:pointer}
-#app{max-width:760px;min-height:100vh;margin:auto;background:#110d13}
-header{text-align:center;padding:28px 15px;background:linear-gradient(140deg,#48172c,#100b12);border-bottom:1px solid #623348}
-h1{font:700 36px Cinzel;letter-spacing:9px;color:#df809a;margin:0}
-header p{font-size:9px;letter-spacing:4px;color:#c9a4b1}
-main{padding:20px}
-.hero{height:230px;padding:20px;display:flex;align-items:end;background:linear-gradient(0deg,#09070a,transparent),linear-gradient(130deg,#4b1c35,#201321,#08090d);border:1px solid #573347}
-.hero h2{font:26px Cinzel;color:#e8a3b6}
-.muted{font-size:11px;color:#a99aa5;line-height:1.9}
-.btn{background:#76334e;border:1px solid #a65b76;color:white;padding:13px 18px;margin:5px 4px 5px 0}
-.btn:hover,.choice:hover{background:#8b3b59}
-.btn.dark{background:#241b28;border-color:#614054}
+body{
+ margin:0;background:#11121a;color:#f4eff5;
+ font-family:Georgia,serif;min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer}
+#game{max-width:760px;margin:auto;min-height:100vh;
+ background:#191923;padding:22px 18px}
+header{text-align:center;padding:20px 0 12px}
+header h1{letter-spacing:5px;font-size:29px;margin:0}
+header p{color:#aaa0b4;font-size:12px;letter-spacing:2px}
+.cover{
+ height:175px;border-radius:12px;
+ background:linear-gradient(0deg,#191923aa,#19192322),
+ url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1000')
+ center/cover;
+ display:flex;align-items:end;padding:15px;
+ color:white;font-size:12px;
+}
+.panel{background:#242431;border:1px solid #383544;
+ border-radius:12px;padding:17px;margin-top:15px}
+.small{font-size:12px;color:#aaa4b3}
+h2{font-size:21px;margin:8px 0}
+h3{font-size:15px;margin:0 0 10px}
+input{
+ width:100%;padding:13px;background:#171721;
+ color:white;border:1px solid #51475b;
+ border-radius:8px;margin:10px 0;
+}
+button{
+ border:1px solid #79627c;background:#393044;
+ color:#fff;padding:13px;border-radius:8px;
+ width:100%;margin-top:9px;font-size:14px;
+ transition:.2s;
+}
+button:hover{background:#634b68}
+.primary{background:#855d7e}
+.secondary{background:#292633}
+.character{
+ display:flex;gap:13px;align-items:center;
+ padding:12px;background:#1b1a25;
+ border-radius:10px;margin-top:10px;
+}
+.avatar{
+ width:55px;height:55px;border-radius:50%;
+ display:grid;place-items:center;font-size:23px;
+ background:#514050;flex-shrink:0;
+}
+.character p{margin:4px 0;color:#aaa;font-size:12px}
+#story{line-height:1.8;white-space:pre-line;font-size:15px}
+#speaker{color:#d5a7cf;font-size:12px;letter-spacing:2px}
+.choice{text-align:left;line-height:1.5}
+.choice small{color:#c6a8c5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#1a1923;border-radius:8px;padding:10px}
+.stat b{font-size:12px}
+.bar{height:5px;background:#45404c;border-radius:8px;margin-top:7px}
+.fill{height:5px;background:#d38cbd;border-radius:8px}
+#log{font-size:12px;color:#aaa;max-height:100px;overflow:auto}
+footer{text-align:center;color:#746d7c;font-size:11px;padding:25px}
 .hidden{display:none!important}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0}
-.stat{background:#211923;border:1px solid #473044;padding:11px;font-size:9px;color:#c4a7b5}
-.stat b{display:block;font-size:18px;color:#e58da8;margin-top:5px}
-.chapter{color:#df819a;font-size:10px;letter-spacing:3px;margin:28px 0 14px}
-.character{font:21px Cinzel;color:#e58da8;margin-bottom:12px}
-.story{font-size:14px;line-height:2.05;color:#e0d8df;white-space:pre-line;min-height:140px}
-.choices{display:grid;gap:10px;margin-top:25px}
-.choice{background:#211923;border:1px solid #674054;color:white;text-align:left;padding:15px;line-height:1.6}
-.choice:focus,.btn:focus{outline:2px solid #e58da8}
-hr{border:0;border-top:1px solid #493344;margin:20px 0}
-.endtitle{font:24px Cinzel;color:#e58da8;line-height:1.5}
-.gallery-item{padding:14px;background:#211923;border:1px solid #54354a;margin:9px 0;font-size:12px}
-footer{text-align:center;padding:25px;color:#796b76;font-size:9px}
 </style>
 </head>
 <body>
-<div id="app">
+<div id="game">
 <header>
-<h1>OBSESSION</h1>
-<p>A DARK ROMANCE INTERACTIVE NOVEL</p>
+<h1>BETWEEN US</h1>
+<p>A STORY ABOUT LOVE, CHOICES & FEELINGS</p>
 </header>
-<main>
 
-<section id="home">
-<div class="hero"><h2>Love can be beautiful.<br>Obsession can be dangerous.</h2></div>
-<p class="muted">Kota yang menyimpan rahasia. Seorang pria yang menyimpan masa lalu. Dan dirimu yang terjebak di antara keduanya.</p>
-<button class="btn" onclick="newGame()">NEW GAME</button>
-<button class="btn dark" onclick="continueGame()">CONTINUE</button>
-<button class="btn dark" onclick="gallery()">ENDING GALLERY</button>
-<p class="muted">Progress tersimpan otomatis di browser perangkatmu.</p>
-</section>
-
-<section id="game" class="hidden">
-<div class="stats">
-<div class="stat">AFFECTION<b id="aff">0</b></div>
-<div class="stat">TRUST<b id="trust">0</b></div>
-<div class="stat">SUSPICION<b id="susp">0</b></div>
+<div id="home">
+<div class="cover">Some feelings are harder to confess.</div>
+<div class="panel">
+<h2>Welcome to Westbridge.</h2>
+<p class="small">Sekolah baru. Orang-orang baru. Dan dua perempuan yang mungkin akan mengubah hidupmu.</p>
+<label class="small">Nama karakter kamu</label>
+<input id="playerName" maxlength="18" placeholder="Masukkan nama...">
+<button class="primary" onclick="startGame()">START NEW GAME</button>
+<button class="secondary" onclick="continueGame()">CONTINUE</button>
+<button class="secondary" onclick="showHelp()">HOW TO PLAY</button>
 </div>
-<div class="chapter" id="chapter"></div>
-<div class="character" id="character"></div>
-<div class="story" id="story"></div>
-<div class="choices" id="choices"></div>
-<hr>
-<button class="btn dark" onclick="backChoice()">BACK</button>
-<button class="btn dark" onclick="home()">MAIN MENU</button>
-</section>
+<div class="panel">
+<h3>CHARACTERS</h3>
+<div class="character">
+<div class="avatar">🌷</div>
+<div><b>Alessia Morgan</b><p>Quiet · Intelligent · Secretly affectionate</p></div>
+</div>
+<div class="character">
+<div class="avatar">🦋</div>
+<div><b>Naomi Carter</b><p>Confident · Playful · Easily jealous</p></div>
+</div>
+</div>
+</div>
 
-<section id="ending" class="hidden">
-<div class="hero"><h2>THE END</h2></div>
-<div class="endtitle" id="endtitle"></div>
-<p class="muted" id="endtext"></p>
-<p class="muted" id="endstats"></p>
-<button class="btn" onclick="newGame()">PLAY AGAIN</button>
-<button class="btn dark" onclick="gallery()">ENDING GALLERY</button>
-<button class="btn dark" onclick="home()">MAIN MENU</button>
-</section>
+<div id="help" class="panel hidden">
+<h2>How to play</h2>
+<p class="small">Pilih jawaban yang menurutmu tepat. Setiap pilihan bisa mengubah hubunganmu dengan karakter lain.</p>
+<p class="small">LOVE: ketertarikan mereka.</p>
+<p class="small">TRUST: kepercayaan mereka padamu.</p>
+<p class="small">JEALOUSY: tingkat kecemburuan.</p>
+<button onclick="hideHelp()">BACK</button>
+</div>
 
-<section id="gallery" class="hidden">
-<div class="endtitle">ENDING GALLERY</div>
-<p class="muted">Kumpulan akhir cerita yang berhasil kamu temukan.</p>
-<div id="galleryList"></div>
-<button class="btn dark" onclick="home()">BACK</button>
-</section>
+<div id="play" class="hidden">
+<div class="stats">
+<div class="stat"><b>🌷 Alessia</b><div id="aNum">0</div><div class="bar"><div class="fill" id="aBar"></div></div></div>
+<div class="stat"><b>🦋 Naomi</b><div id="nNum">0</div><div class="bar"><div class="fill" id="nBar"></div></div></div>
+<div class="stat"><b>♡ Trust</b><div id="trustNum">0</div><div class="bar"><div class="fill" id="tBar"></div></div></div>
+</div>
+<div class="panel">
+<div class="small" id="chapter">CHAPTER 01</div>
+<h2 id="title">First Day</h2>
+<div id="speaker">NARRATOR</div>
+<p id="story"></p>
+<div id="choices"></div>
+</div>
+<div class="panel">
+<h3>STORY HISTORY</h3>
+<div id="log">Belum ada cerita.</div>
+</div>
+<button class="secondary" onclick="saveGame()">SAVE GAME</button>
+<button class="secondary" onclick="goHome()">MAIN MENU</button>
+</div>
 
-</main>
-<footer>OBSESSION © DARK ROMANCE STORY</footer>
+<div id="ending" class="hidden">
+<div class="panel">
+<div class="small">YOUR STORY ENDS HERE</div>
+<h2 id="endingTitle"></h2>
+<p id="endingText" style="line-height:1.8"></p>
+</div>
+<button class="primary" onclick="startGame()">PLAY AGAIN</button>
+<button class="secondary" onclick="goHome()">MAIN MENU</button>
+</div>
+
+<footer>BETWEEN US · A FICTIONAL WLW STORY</footer>
 </div>
 
 <script>
-"use strict";
+const $=id=>document.getElementById(id);
 
-const endings={
-love:{
-title:"TRUE ENDING — LOVE WITHOUT LIES",
-text:"Adrian akhirnya menceritakan seluruh kebenaran. Hubungan kalian tidak sempurna, tetapi kalian belajar untuk saling menghormati dan memilih satu sama lain tanpa paksaan."
-},
-freedom:{
-title:"FREEDOM ENDING — YOUR OWN LIFE",
-text:"Kau meninggalkan kota itu dan memulai kehidupan baru. Adrian menjadi bagian dari masa lalu. Untuk pertama kalinya, kau tidak perlu takut pada rahasia siapa pun."
-},
-trust:{
-title:"GOOD ENDING — THE TRUTH",
-text:"Bersama Noah, kau berhasil mengungkap kejahatan yang disembunyikan selama bertahun-tahun. Kebenaran akhirnya menang."
-},
-bad:{
-title:"BAD ENDING — THE LAST LIE",
-text:"Kau memilih mempercayai orang yang salah. Adrian menghilang. Beberapa bulan kemudian, sebuah surat hitam kembali muncul di depan pintumu."
-},
-secret:{
-title:"SECRET ENDING — BEHIND THE MASK",
-text:"Kau menemukan bahwa seseorang yang selama ini membantumu ternyata memiliki hubungan dengan seluruh kejadian. Semua jawaban ada di sana, tetapi tidak ada yang benar-benar bebas dari masa lalu."
-},
-bittersweet:{
-title:"BITTERSWEET ENDING — ALMOST US",
-text:"Adrian tetap menyayangimu, tetapi kalian memilih jalan masing-masing. Tidak semua cinta harus dimiliki untuk menjadi berarti."
+let state={name:"",a:0,n:0,t:0,j:0,day:1,log:[],route:""};
+let current="intro";
+
+function startGame(){
+ const name=$("playerName").value.trim()||"Rei";
+ state={name,a:0,n:0,t:0,j:0,day:1,log:[],route:""};
+ current="intro";
+ $("home").classList.add("hidden");
+ $("help").classList.add("hidden");
+ $("ending").classList.add("hidden");
+ $("play").classList.remove("hidden");
+ render();
 }
-};
 
-const chapters={
-start:{
-chapter:"PROLOGUE — THE LETTER",name:"Narrator",
-text:`Hujan turun deras malam ini.
+function showHelp(){$("help").classList.remove("hidden")}
+function hideHelp(){$("help").classList.add("hidden")}
 
-Kau baru saja pindah ke sebuah apartemen di pusat kota. Kehidupan baru, lingkungan baru, dan tidak ada seorang pun yang mengenalmu.
-
-Saat membuka pintu, sebuah amplop hitam tergeletak di lantai.
-
-Di dalamnya hanya ada tulisan:
-
-"Finally, you're home."
-
-Tidak ada nama pengirim.`,
+const scenes={
+intro:{
+chapter:"CHAPTER 01 · MONDAY",
+title:"The New Girl",
+speaker:"NARRATOR",
+text:()=>`Hari pertamamu di Westbridge Academy.\n\nKamu berdiri di depan kelas sambil memperhatikan seluruh murid. Beberapa orang sedang mengobrol, sementara yang lain sibuk dengan ponsel mereka.\n\n"Ah, kamu murid pindahan?"\n\nSeorang perempuan dengan rambut hitam sebahu menghampirimu. Tatapannya tenang.`,
 choices:[
-["Membuka amplop.", "letter",{susp:1}],
-["Membuangnya.", "trash",{trust:1}],
-["Memeriksa lorong apartemen.", "hall",{susp:1}]
+["Senyum dan memperkenalkan diri.","intro2",{a:2,t:2}],
+["Mengangguk singkat.","intro2",{a:1}],
+["Bercanda agar suasana tidak canggung.","intro2",{n:2}]
 ]},
-letter:{
-chapter:"CHAPTER 01 — UNKNOWN",name:"Narrator",
-text:`Di dalam amplop ada foto seorang pria berambut hitam. Wajahnya terlihat dingin.
-
-Di belakang foto tertulis:
-
-"Adrian. Jangan percaya padanya."
-
-Ponselmu bergetar.
-
-Nomor tidak dikenal:
-"Sudah membaca suratnya?"`,
+intro2:{
+chapter:"CHAPTER 01 · MONDAY",
+title:"Two Different Smiles",
+speaker:"ALESSIA",
+text:()=>`"Aku Alessia. Kalau butuh bantuan, bilang saja."\n\nBelum sempat kamu menjawab, seorang perempuan lain tiba-tiba muncul dari belakangnya.\n\n"Alessia! Jangan menculik murid baru dong."\n\nDia tertawa kecil dan menatapmu.\n\n"Aku Naomi. Kamu boleh duduk sama aku kalau mau."`,
 choices:[
-["Membalas: Siapa kamu?", "message",{trust:1}],
-["Bertanya tentang foto.", "message",{susp:1}],
-["Memblokir nomor tersebut.", "blocked",{susp:1}]
+["Aku mau duduk dengan Alessia.","classroom",{a:3,route:"a"}],
+["Aku ikut Naomi saja.","classroom",{n:3,route:"n"}],
+["Kalian berdua boleh jadi temanku?","classroom",{a:1,n:1,t:3}]
 ]},
-trash:{
-chapter:"CHAPTER 01 — THE KNOCK",name:"Narrator",
-text:`Kau membuang amplop itu.
-
-Beberapa menit kemudian terdengar tiga ketukan pintu.
-
-Saat dibuka, tidak ada siapa-siapa. Hanya sebuah bunga mawar hitam dan secarik kertas.
-
-"Kesempatan kedua tidak selalu datang."`,
+classroom:{
+chapter:"CHAPTER 01 · MONDAY",
+title:"A Seat Beside You",
+speaker:"NARRATOR",
+text:()=>`Kelas dimulai. Kamu duduk di tempat pilihanmu.\n\nDi tengah pelajaran, sebuah kertas kecil sampai ke mejamu.\n\n${state.route==="n"?"Naomi":"Alessia"} menulis sesuatu di sana:\n\n"Jangan lupa makan siang. Kamu kelihatan belum sarapan."\n\nKamu sedikit tersenyum.`,
 choices:[
-["Mengambil bunga itu.", "message",{aff:1}],
-["Membuangnya juga.", "blocked",{trust:1}]
+["Balas dengan ucapan terima kasih.","lunch",{a:2,n:2,t:2}],
+["Tulis sesuatu yang sedikit menggoda.","lunch",{a:1,n:3}],
+["Simpan kertas itu tanpa membalas.","lunch",{a:1}]
 ]},
-hall:{
-chapter:"CHAPTER 01 — THE STRANGER",name:"Narrator",
-text:`Lorong apartemen kosong.
-
-Namun di ujung lorong, seseorang berdiri membelakangimu. Jas hitam, postur tinggi, dan satu tangan di saku.
-
-Ketika kau berkedip, orang itu sudah menghilang.
-
-Ponselmu menerima pesan:
-
-"Jangan terlalu penasaran."`,
+lunch:{
+chapter:"CHAPTER 02 · TUESDAY",
+title:"Lunch Together",
+speaker:"NAOMI",
+text:()=>`Waktu makan siang.\n\nNaomi melambaikan tangan dari meja dekat jendela.\n\n"Hei! Sini!"\n\nAlessia juga ada di sana. Dia sedang membaca buku sambil sesekali melirik ke arahmu.\n\n"Sepertinya hari ini kita makan bertiga," kata Naomi.`,
 choices:[
-["Mencari orang itu.", "message",{susp:1}],
-["Kembali ke kamar.", "blocked",{trust:1}]
+["Duduk di sebelah Alessia.","library",{a:3,j:1}],
+["Duduk di sebelah Naomi.","library",{n:3,j:1}],
+["Duduk di tengah mereka.","library",{a:1,n:1,t:3}]
 ]},
-message:{
-chapter:"CHAPTER 02 — ADRIAN",name:"Adrian",
-text:`"Namaku Adrian."
-
-Suaranya tenang saat akhirnya kalian bertemu di sebuah kafe.
-
-"Aku tahu kau punya banyak pertanyaan."
-
-Dia meletakkan kartu nama di atas meja.
-
-"Aku mengenal keluargamu. Sudah lama."
-
-Tatapannya tidak pernah lepas darimu.`,
+library:{
+chapter:"CHAPTER 02 · WEDNESDAY",
+title:"The Library",
+speaker:"ALESSIA",
+text:()=>`Sepulang sekolah, kamu menemukan Alessia sendirian di perpustakaan.\n\n"Kamu suka membaca?" tanyanya.\n\nDia menggeser kursinya sedikit, memberikan ruang di sebelahnya.\n\n"Aku biasanya di sini kalau sedang ingin sendiri. Tapi... hari ini tidak masalah kalau kamu ikut."`,
 choices:[
-["Duduk dan mendengarkannya.", "cafe",{aff:1,trust:1}],
-["Menanyakan maksudnya.", "secret",{trust:1}],
-["Menolak berbicara.", "noah",{susp:1}]
+["Duduk di sampingnya.","library2",{a:4,t:2}],
+["Tanya kenapa dia sering sendirian.","library2",{a:2,t:3}],
+["Ajak Naomi bergabung lewat chat.","library2",{n:3,j:1}]
 ]},
-blocked:{
-chapter:"CHAPTER 02 — THE CAFE",name:"Narrator",
-text:`Keesokan harinya, kau menemukan sebuah kartu nama di depan apartemen.
-
-Adrian.
-
-Di baliknya ada alamat sebuah kafe.
-
-Ketika kau tiba, seorang pria sudah menunggumu.
-
-"Aku kira kau tidak akan datang."`,
+library2:{
+chapter:"CHAPTER 02 · WEDNESDAY",
+title:"A Little Closer",
+speaker:"NARRATOR",
+text:()=>`Sore itu berlalu dengan tenang.\n\nSebelum pulang, Alessia memberikan sebuah sticky note kepadamu.\n\n"Nomor teleponku. Kalau butuh sesuatu, chat saja."\n\nDia memalingkan wajah. Ujung telinganya sedikit memerah.`,
 choices:[
-["Duduk dengannya.", "cafe",{aff:1}],
-["Menanyakan bagaimana dia menemukanmu.", "secret",{susp:1}]
+["Simpan nomor dan langsung chat.","chat",{a:3,t:2}],
+["Menggoda Alessia karena malu.","chat",{a:3,j:1}],
+["Ucapkan terima kasih.","chat",{a:1,t:2}]
 ]},
-cafe:{
-chapter:"CHAPTER 03 — COFFEE",name:"Adrian",
-text:`Adrian memesan dua kopi.
-
-"Ada sesuatu yang harus kau tahu."
-
-Dia mengeluarkan foto lama. Di sana ada dirinya bersama seseorang yang wajahnya mirip dengan keluargamu.
-
-"Orang ini menghilang tujuh tahun lalu."
-
-Dia berhenti sebentar.
-
-"Aku belum pernah berhenti mencarinya."`,
+chat:{
+chapter:"CHAPTER 03 · THURSDAY",
+title:"2:17 AM",
+speaker:"YOUR PHONE",
+text:()=>`Ponselmu bergetar.\n\nAlessia: "Kamu sudah tidur?"\n\nAlessia: "Maaf, aku tahu ini sudah malam."\n\nAlessia: "Aku cuma ingin tahu bagaimana harimu."\n\nKamu menatap layar cukup lama. Ada pesan lain masuk. Kali ini dari Naomi.\n\nNaomi: "Besok pulang bareng aku, ya? No excuses."`,
 choices:[
-["Meminta penjelasan lengkap.", "past",{trust:2}],
-["Bertanya mengapa dia mendekatimu.", "secret",{aff:1}],
-["Mengambil foto itu.", "noah",{susp:1}]
+["Balas Alessia dengan perhatian.","morning",{a:4,t:3}],
+["Balas Naomi lebih dulu.","morning",{n:4}],
+["Balas keduanya dengan jujur.","morning",{a:2,n:2,t:4}]
 ]},
-secret:{
-chapter:"CHAPTER 04 — HIS SECRET",name:"Adrian",
-text:`"Aku tidak akan berbohong. Ada alasan kenapa aku mencarimu."
-
-Dia membuka sebuah map.
-
-Terdapat dokumen kecelakaan lama, foto keluarga, dan sebuah nama yang dicoret.
-
-"Namamu ada dalam dokumen ini."
-
-Adrian terlihat ragu.
-
-"Tapi aku tidak tahu apakah kau siap mendengarnya."`,
+morning:{
+chapter:"CHAPTER 03 · FRIDAY",
+title:"Something Feels Different",
+speaker:"NAOMI",
+text:()=>`Pagi itu Naomi menghampirimu.\n\n"Kamu akhir-akhir ini dekat banget sama Alessia, ya?"\n\nSenyumnya masih ada, tetapi nadanya sedikit berbeda.\n\n"Aku cuma penasaran."\n\nDari kejauhan, Alessia memperhatikan kalian.`,
 choices:[
-["Membaca semua dokumen.", "past",{trust:2}],
-["Menuntut jawaban sekarang.", "confront",{susp:1}],
-["Pergi dan mencari Noah.", "noah",{trust:1}]
+["Bilang bahwa kalian hanya berteman.","rain",{n:2,t:2}],
+["Tanya apakah Naomi cemburu.","rain",{n:4,j:2}],
+["Akui bahwa kamu mulai menyukai seseorang.","rain",{a:1,n:1,t:3}]
 ]},
-noah:{
-chapter:"CHAPTER 04 — NOAH",name:"Noah",
-text:`Noah adalah teman lama yang sudah lama tidak kau temui.
-
-Ketika mendengar nama Adrian, wajahnya berubah.
-
-"Dia?"
-
-Noah menatapmu.
-
-"Aku tidak tahu kenapa dia mendekatimu, tapi kau harus berhati-hati."
-
-Dia menunjukkan sebuah berita lama tentang kecelakaan tujuh tahun lalu.`,
+rain:{
+chapter:"CHAPTER 04 · FRIDAY",
+title:"Under One Umbrella",
+speaker:"NARRATOR",
+text:()=>`Hujan turun deras ketika sekolah selesai.\n\nKamu berdiri di depan gerbang. Alessia datang membawa payung.\n\n"Rumah kita searah. Mau pulang bersama?"\n\nNamun Naomi juga muncul.\n\n"Aku bisa antar kamu. Mobilku sudah di depan."\n\nKeduanya menunggumu menjawab.`,
 choices:[
-["Meminta Noah menceritakan semuanya.", "past",{trust:2}],
-["Membela Adrian.", "adrian",{aff:1}],
-["Bertanya apa yang Noah sembunyikan.", "noahsecret",{susp:1}]
+["Pulang bersama Alessia.","walk",{a:4,t:2}],
+["Pulang bersama Naomi.","walk",{n:4,t:1}],
+["Bilang kamu ingin pulang sendiri hari ini.","walk",{t:3}]
 ]},
-past:{
-chapter:"CHAPTER 05 — SEVEN YEARS AGO",name:"Narrator",
-text:`Tujuh tahun lalu, sebuah kecelakaan terjadi di jalan pegunungan.
-
-Dua orang menghilang malam itu.
-
-Salah satunya adalah kakak Adrian.
-
-Orang kedua memiliki hubungan dengan keluargamu.
-
-Kau mulai menyadari bahwa kehidupanmu sekarang berkaitan dengan kejadian itu.
-
-Namun siapa yang mengubah laporan kecelakaan?`,
+walk:{
+chapter:"CHAPTER 04 · EVENING",
+title:"An Honest Conversation",
+speaker:"NARRATOR",
+text:()=>`Sebelum berpisah, kamu mendapat kesempatan bicara berdua dengan salah satu dari mereka.\n\n${state.a>=state.n?"Alessia":"Naomi"} terlihat ingin mengatakan sesuatu, tetapi terus mengurungkan niatnya.\n\n"Aku boleh tanya sesuatu?"`,
 choices:[
-["Mengunjungi rumah Adrian.", "house",{aff:1}],
-["Menyelidiki arsip lama.", "archive",{trust:2}],
-["Menemui Noah lagi.", "noahsecret",{trust:1}]
+["Tentu. Cerita saja.","confession",{t:4,a:2,n:2}],
+["Kamu terlihat sedang memikirkan sesuatu.","confession",{t:3,a:2,n:2}],
+["Pegang tangannya dengan lembut.","confession",{a:3,n:3,t:2}]
 ]},
-adrian:{
-chapter:"CHAPTER 05 — AN UNEXPECTED VISIT",name:"Adrian",
-text:`Malam itu Adrian datang membawa payung hitam.
-
-"Aku tidak akan masuk kalau kau tidak mengizinkan."
-
-Dia meletakkan sebuah kotak di depan pintu.
-
-"Aku ingin kau tahu bahwa aku tidak menganggapmu sebagai alat untuk menemukan jawaban."
-
-Kau memperhatikannya dalam diam.`,
+confession:{
+chapter:"CHAPTER 05 · MONDAY",
+title:"The Confession",
+speaker:"NARRATOR",
+text:()=>`Hari-hari berlalu. Hubungan kalian semakin dekat.\n\nSore ini, salah satu dari mereka mengajakmu ke rooftop sekolah.\n\n${state.a>state.n?"Alessia berdiri di dekat pagar. Rambutnya bergerak tertiup angin.":"Naomi berdiri di dekat pintu. Biasanya dia banyak bicara, tetapi sekarang terlihat gugup."}\n\n"Aku tidak tahu harus mulai dari mana..."`,
 choices:[
-["Mempersilakannya masuk.", "house",{aff:2}],
-["Mengambil kotak saja.", "archive",{trust:1}],
-["Meminta dia pulang.", "freedom",{trust:1}]
+["Aku akan mendengarkan.","confession2",{t:4}],
+["Katakan saja apa yang kamu rasakan.","confession2",{a:2,n:2}],
+["Aku juga ingin bicara tentang perasaanku.","confession2",{a:2,n:2,t:2}]
 ]},
-noahsecret:{
-chapter:"CHAPTER 06 — ANOTHER LIE",name:"Noah",
-text:`Noah akhirnya mengaku bahwa dia juga mengetahui kejadian tujuh tahun lalu.
-
-"Aku takut kehilangan orang-orang yang masih ada."
-
-Dia menyerahkan sebuah flashdisk.
-
-"Ada rekaman suara di dalamnya. Dengarkan sendiri."
-
-Kau menyadari bahwa Adrian dan Noah sama-sama menyembunyikan sesuatu.`,
+confession2:{
+chapter:"CHAPTER 05 · MONDAY",
+title:"Almost Us",
+speaker:"NARRATOR",
+text:()=>`Dia menarik napas panjang.\n\n"Aku mulai menyukaimu. Bukan sekadar teman."\n\nUntuk pertama kalinya, tidak ada candaan atau obrolan ringan.\n\nHanya kalian berdua, dan perasaan yang selama ini disimpan.`,
 choices:[
-["Mendengarkan rekaman.", "record",{trust:2}],
-["Membawa flashdisk ke Adrian.", "confront",{aff:1}],
-["Menyimpan flashdisk.", "archive",{susp:1}]
+["Aku juga menyukaimu.","final",{a:4,n:4,t:3}],
+["Aku butuh waktu untuk memahami perasaanku.","final",{t:4}],
+["Aku tidak ingin kehilangan persahabatan kita.","final",{t:3}]
 ]},
-house:{
-chapter:"CHAPTER 06 — HIS HOUSE",name:"Adrian",
-text:`Rumah Adrian besar dan sangat tenang.
-
-Banyak buku dan foto lama memenuhi ruangannya.
-
-Di atas meja ada dua cangkir teh.
-
-"Aku tidak tahu bagaimana menjelaskan masa laluku."
-
-Dia duduk di hadapanmu.
-
-"Tapi aku ingin kau mengenal diriku yang sekarang, bukan hanya kesalahan yang pernah kubuat."`,
+final:{
+chapter:"CHAPTER 06 · FINAL",
+title:"Choose Your Ending",
+speaker:"NARRATOR",
+text:()=>`Hari terakhir semester tiba.\n\nKamu berdiri di halaman sekolah, mengingat semua hal yang sudah terjadi.\n\nDua perempuan itu memiliki tempat berbeda di hatimu.\n\nSekarang, kamu harus menentukan apa yang sebenarnya kamu inginkan.`,
 choices:[
-["Mengobrol dengannya.", "romance",{aff:2,trust:1}],
-["Meminta dia menunjukkan dokumen.", "archive",{trust:1}],
-["Bertanya tentang kakaknya.", "confront",{susp:1}]
-]},
-archive:{
-chapter:"CHAPTER 07 — THE ARCHIVE",name:"Narrator",
-text:`Arsip kota menyimpan banyak dokumen lama.
-
-Kau menemukan laporan kecelakaan yang sudah diubah.
-
-Ada tanda tangan Adrian.
-
-Namun ada juga nama Noah.
-
-Seseorang telah menghapus satu halaman penting.
-
-Sebelum kau sempat mencari lebih jauh, seorang petugas memanggil namamu.`,
-choices:[
-["Mencari halaman yang hilang.", "record",{trust:1}],
-["Menghubungi Adrian.", "confront",{aff:1}],
-["Meninggalkan arsip.", "freedom",{trust:1}]
-]},
-record:{
-chapter:"CHAPTER 08 — THE RECORDING",name:"Narrator",
-text:`Rekaman itu berisi percakapan dua orang.
-
-Salah satunya terdengar seperti Adrian.
-
-"Kalau dokumen itu ditemukan, semuanya akan terbongkar."
-
-Namun rekaman terputus sebelum percakapan selesai.
-
-Di bagian akhir terdengar suara Noah:
-
-"Dia bukan satu-satunya yang bersalah."
-
-Kau mulai mempertanyakan semua orang.`,
-choices:[
-["Menghadapi Adrian.", "confront",{susp:1}],
-["Menghadapi Noah.", "betrayal",{trust:1}],
-["Mencari rekaman lengkap.", "truth",{trust:2}]
-]},
-confront:{
-chapter:"CHAPTER 09 — CONFRONTATION",name:"Adrian",
-text:`Adrian mendengarkan semuanya tanpa menyela.
-
-"Aku memang mengubah laporan itu."
-
-Dia menatap lantai.
-
-"Tapi aku melakukannya karena seseorang mengancam keluargaku."
-
-Dia menghela napas.
-
-"Aku tahu itu bukan alasan untuk berbohong padamu."
-
-Untuk pertama kalinya, dia terlihat benar-benar menyesal.`,
-choices:[
-["Memberinya kesempatan menjelaskan.", "romance",{aff:2,trust:1}],
-["Meminta bukti.", "truth",{trust:2}],
-["Mengatakan bahwa kau tidak percaya.", "freedom",{susp:2}]
-]},
-romance:{
-chapter:"CHAPTER 10 — CLOSER",name:"Adrian",
-text:`Malam semakin larut.
-
-Adrian membuatkan teh dan duduk tidak jauh darimu.
-
-"Aku tidak akan memintamu tinggal hanya karena aku menginginkannya."
-
-Dia menatapmu.
-
-"Aku ingin kau punya pilihan."
-
-Kali ini, tidak ada kebohongan di antara kalian. Setidaknya untuk malam ini.`,
-choices:[
-["Menggenggam tangannya.", "promise",{aff:3,trust:1}],
-["Bertanya tentang perasaannya.", "promise",{aff:2}],
-["Meminta waktu untuk berpikir.", "bittersweet",{trust:1}]
-]},
-betrayal:{
-chapter:"CHAPTER 10 — BETRAYAL",name:"Noah",
-text:`Noah akhirnya menceritakan seluruh rahasianya.
-
-Dia pernah membantu seseorang mengubah laporan kecelakaan.
-
-"Aku tidak tahu akibatnya akan sebesar ini."
-
-Dia memberikan alamat sebuah rumah tua.
-
-"Di sana ada bukti terakhir."
-
-Kau mulai memahami bahwa tidak ada yang sepenuhnya jujur.`,
-choices:[
-["Pergi ke rumah tua.", "truth",{trust:2}],
-["Membawa Noah kepada Adrian.", "confront",{susp:1}],
-["Meninggalkan mereka berdua.", "freedom",{trust:1}]
-]},
-truth:{
-chapter:"CHAPTER 11 — THE FINAL TRUTH",name:"Narrator",
-text:`Di rumah tua itu, kau menemukan dokumen terakhir.
-
-Ternyata seseorang dari lingkaran keluarga telah memanipulasi seluruh kejadian.
-
-Adrian mengetahui sebagian kebenaran. Noah mengetahui sisanya.
-
-Sebuah surat menyebutkan nama pelaku sebenarnya.
-
-Kini kau punya bukti yang cukup untuk mengakhiri semuanya.`,
-choices:[
-["Membawa bukti kepada polisi.", "good",{trust:3}],
-["Memberitahu Adrian terlebih dahulu.", "promise",{aff:1}],
-["Menyimpan bukti itu.", "secretend",{susp:2}]
-]},
-promise:{
-chapter:"CHAPTER 12 — A PROMISE",name:"Adrian",
-text:`Adrian berdiri di depan jendela.
-
-"Aku menyayangimu, tapi aku tidak ingin perasaanku menjadi alasan kau kehilangan kebebasan."
-
-Dia mengulurkan tangan.
-
-"Kalau kau memilih pergi, aku akan menghormatinya."
-
-Kau harus memutuskan bagaimana hubungan kalian akan berakhir.`,
-choices:[
-["Memulai hubungan dengannya.", "love",{aff:3,trust:2}],
-["Tetap berteman.", "bittersweet",{trust:2}],
-["Mengucapkan selamat tinggal.", "freedom",{trust:1}]
-]},
-good:{
-chapter:"FINAL — JUSTICE",name:"Narrator",
-text:`Bukti diserahkan kepada polisi.
-
-Kasus lama kembali dibuka.
-
-Adrian dan Noah memberikan kesaksian. Kebenaran akhirnya diketahui.
-
-Tidak semua orang mendapatkan akhir yang mereka inginkan.
-
-Namun kau berhasil mendapatkan jawaban.`,
-choices:[
-["Melanjutkan hidup.", "trustend",{trust:2}],
-["Menemui Adrian untuk terakhir kali.", "bittersweet",{aff:1}]
-]},
-freedom:{
-chapter:"FINAL — YOUR OWN LIFE",name:"Narrator",
-text:`Kau memutuskan untuk meninggalkan kota itu.
-
-Tidak ada lagi surat hitam, pesan misterius, atau rahasia yang harus kau pecahkan.
-
-Kau memulai hidup baru.
-
-Namun sebelum pergi, sebuah pesan masuk dari Adrian:
-
-"Terima kasih sudah pernah hadir."`,
-choices:[
-["Membalas pesannya.", "bittersweet",{aff:1}],
-["Menghapus pesan.", "freedomend",{trust:2}]
+["Aku memilih Alessia.","endA",{}],
+["Aku memilih Naomi.","endN",{}],
+["Aku belum siap memilih siapa pun.","endF",{}],
+["Aku ingin mencoba hubungan bertiga dengan jujur.","endT",{t:3}]
 ]}
 };
 
-let state={current:"start",aff:0,trust:0,susp:0,history:[]};
-
-function loadGallery(){
- try{return JSON.parse(localStorage.getItem("obsessionGallery")||"[]")}
- catch(e){return []}
-}
-function saveGallery(id){
- let g=loadGallery();
- if(!g.includes(id))g.push(id);
- localStorage.setItem("obsessionGallery",JSON.stringify(g));
-}
-function persist(){
- localStorage.setItem("obsessionSave",JSON.stringify(state));
-}
-function screen(id){
- ["home","game","ending","gallery"].forEach(x=>
- document.getElementById(x).classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
-}
-function home(){screen("home")}
-function newGame(){
- state={current:"start",aff:0,trust:0,susp:0,history:[]};
- screen("game");render();
-}
-function continueGame(){
- try{
- let d=JSON.parse(localStorage.getItem("obsessionSave"));
- if(!d||!chapters[d.current]){alert("Belum ada save game.");return}
- state=d;screen("game");render();
- }catch(e){alert("Save tidak ditemukan.");}
-}
-function render(){
- let s=chapters[state.current];
- if(!s){return}
- document.getElementById("chapter").textContent=s.chapter;
- document.getElementById("character").textContent=s.name;
- document.getElementById("story").textContent=s.text;
- document.getElementById("aff").textContent=state.aff;
- document.getElementById("trust").textContent=state.trust;
- document.getElementById("susp").textContent=state.susp;
- let box=document.getElementById("choices");
- box.innerHTML="";
- s.choices.forEach(c=>{
-  let b=document.createElement("button");
-  b.className="choice";b.textContent=c[0];
-  b.onclick=()=>choose(c[1],c[2]);
-  box.appendChild(b);
- });
- persist();
-}
-function choose(next,change){
- state.history.push({
- current:state.current,aff:state.aff,
- trust:state.trust,susp:state.susp
- });
- Object.keys(change||{}).forEach(k=>state[k]+=change[k]);
- if(chapters[next]){
-  state.current=next;render();
- }else{
-  finish(next);
+function ending(id){
+ const endings={
+ endA:{
+ title:"ENDING 01 — ONLY YOU",
+ text:`Kamu memilih Alessia.\n\nDia tersenyum kecil, lalu menggenggam tanganmu.\n\n"Aku tidak pandai mengungkapkan perasaan. Tapi aku ingin mencoba, bersamamu."\n\nNaomi akhirnya menerima keputusanmu. Meski sedikit sedih, dia tetap menjadi teman kalian.\n\nDi bawah langit sore Westbridge, kalian memulai sesuatu yang baru.`
+ },
+ endN:{
+ title:"ENDING 02 — MY FAVORITE PERSON",
+ text:`Kamu memilih Naomi.\n\n"Serius? Kamu benar-benar memilih aku?" Dia tertawa tidak percaya.\n\nNaomi memelukmu dengan hangat.\n\n"Aku janji akan berusaha membuatmu bahagia. Tapi kalau aku mulai menyebalkan, tegur aku, ya."\n\nUntuk pertama kalinya, Naomi terlihat benar-benar gugup.`
+ },
+ endF:{
+ title:"ENDING 03 — NOT YET",
+ text:`Kamu memilih dirimu sendiri.\n\nAlessia dan Naomi memahami keputusanmu.\n\nKamu masih punya banyak hal untuk dipelajari tentang cinta dan dirimu sendiri.\n\nTidak semua cerita harus berakhir dengan memiliki seseorang. Terkadang, bahagia juga berarti memberi waktu untuk diri sendiri.`
+ },
+ endT:{
+ title:"ENDING 04 — THREE HEARTS",
+ text:`Kamu memilih untuk jujur tentang perasaanmu kepada keduanya.\n\nAwalnya mereka terkejut. Setelah banyak percakapan, batasan, dan kejujuran, kalian memutuskan untuk mencoba hubungan yang disepakati bersama.\n\nTidak mudah, tetapi kali ini tidak ada yang harus berpura-pura atau menyembunyikan perasaan.`
  }
+ };
+ const e=endings[id];
+ $("play").classList.add("hidden");
+ $("ending").classList.remove("hidden");
+ $("endingTitle").textContent=e.title;
+ $("endingText").textContent=e.text;
+ localStorage.setItem("betweenUsEnding",e.title);
 }
-function backChoice(){
- if(!state.history.length)return;
- let old=state.history.pop();
- state.current=old.current;
- state.aff=old.aff;state.trust=old.trust;state.susp=old.susp;
+
+function render(){
+ const s=scenes[current];
+ if(!s)return;
+ $("chapter").textContent=s.chapter;
+ $("title").textContent=s.title;
+ $("speaker").textContent=s.speaker;
+ $("story").textContent=s.text();
+ $("choices").innerHTML="";
+ s.choices.forEach(c=>{
+  const b=document.createElement("button");
+  b.className="choice";
+  b.textContent=c[0];
+  b.onclick=()=>choose(c);
+  $("choices").appendChild(b);
+ });
+ updateStats();
+ $("log").textContent=state.log.join("  •  ")||"Belum ada cerita.";
+}
+
+function choose(c){
+ const [label,next,effect]=c;
+ state.a=Math.max(0,Math.min(100,state.a+(effect.a||0)));
+ state.n=Math.max(0,Math.min(100,state.n+(effect.n||0)));
+ state.t=Math.max(0,Math.min(100,state.t+(effect.t||0)));
+ state.j=Math.max(0,Math.min(100,state.j+(effect.j||0)));
+ if(effect.route)state.route=effect.route;
+ state.log.push(label);
+ current=next;
+ if(next.startsWith("end")){ending(next);return}
  render();
 }
-function finish(id){
- const e=endings[id];
- if(!e)return;
- saveGallery(id);
- localStorage.removeItem("obsessionSave");
- document.getElementById("endtitle").textContent=e.title;
- document.getElementById("endtext").textContent=e.text;
- document.getElementById("endstats").textContent=
- "Affection: "+state.aff+" | Trust: "+state.trust+" | Suspicion: "+state.susp;
- screen("ending");
-}
-function gallery(){
- let list=document.getElementById("galleryList");
- list.innerHTML="";
- let g=loadGallery();
- if(!g.length){
- list.textContent="Belum ada ending. Mainkan game untuk membuka ending!";
- }else{
- g.forEach(id=>{
-  let d=document.createElement("div");
-  d.className="gallery-item";
-  d.textContent=endings[id].title;
-  list.appendChild(d);
+
+function updateStats(){
+ [["aNum","aBar",state.a],["nNum","nBar",state.n],["trustNum","tBar",state.t]].forEach(x=>{
+ $(x[0]).textContent=x[2];
+ $(x[1]).style.width=x[2]+"%";
  });
- }
- screen("gallery");
 }
+
+function saveGame(){
+ localStorage.setItem("betweenUsSave",JSON.stringify({state,current}));
+ alert("Game berhasil disimpan!");
+}
+
+function continueGame(){
+ const data=localStorage.getItem("betweenUsSave");
+ if(!data){alert("Belum ada save game!");return}
+ try{
+ const d=JSON.parse(data);
+ state=d.state;current=d.current;
+ $("home").classList.add("hidden");
+ $("play").classList.remove("hidden");
+ $("ending").classList.add("hidden");
+ render();
+ }catch(e){alert("Save tidak bisa dibaca.")}
+}
+
+function goHome(){
+ $("play").classList.add("hidden");
+ $("ending").classList.add("hidden");
+ $("help").classList.add("hidden");
+ $("home").classList.remove("hidden");
+}
+
 </script>
 </body>
 </html>
